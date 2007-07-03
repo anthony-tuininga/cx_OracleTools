@@ -91,6 +91,10 @@ SHOW_FOREIGN_KEYS = cx_OptionParser.Option("--show-foreign-keys",
         default = False, action = "store_true", dest = "wantForeignKeys",
         help = "include the foreign keys referencing the object")
 
+SHOW_SYNONYMS = cx_OptionParser.Option("--show-synonyms",
+        default = False, action = "store_true", dest = "wantSynonyms",
+        help = "include the synonyms referencing the object")
+
 SPLIT_RELATED = cx_OptionParser.Option("--split-related", default = False,
         action = "store_true", dest = "splitRelated",
         help = "split related objects into separate files when exporting")

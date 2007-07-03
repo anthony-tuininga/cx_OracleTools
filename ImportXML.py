@@ -1,16 +1,19 @@
 """Import data from an XML file into a table in an Oracle database."""
 
+import cx_Logging
 import cx_LoggingOptions
 import cx_OptionParser
-import cx_Oracle
 import cx_OracleUtils
-import cx_XML
 import _strptime
 import sys
 import time
-import xml.sax
 
 import Options
+
+try:
+    import cElementTree
+except ImportError:
+    from xml.etree import cElementTree
 
 # parse command line
 parser = cx_OptionParser.OptionParser("ImportXML")
@@ -30,7 +33,7 @@ options = parser.Parse()
 cx_LoggingOptions.ProcessOptions(options)
 
 # define class for managing the import
-class Handler(cx_XML.Parser):
+class Handler(object):
 
     def __init__(self, options):
         self.connection = cx_OracleUtils.Connect(options.schema,
@@ -49,10 +52,10 @@ class Handler(cx_XML.Parser):
         columnNames = []
         for item in self.cursor.description:
             name, dataType, size, internalSize, prec, scale, nullsOk = item
-            if dataType == cx_Oracle.DATETIME:
+            if dataType == self.connection.DATETIME:
                 self.dateColumns[name.upper()] = None
             else:
-                dataType = cx_Oracle.STRING
+                dataType = self.connection.STRING
             self.columnIndexes[name.upper()] = len(bindVars)
             bindVars.append(self.cursor.var(dataType, size))
             columnNames.append(name)
@@ -64,68 +67,46 @@ class Handler(cx_XML.Parser):
         self.cursor.setinputsizes(*bindVars)
         self.allowCustomTags = False
         self.columnValue = None
-        self.rowsImported = 0
 
-    def characters(self, data):
-        if self.columnValue is not None:
-            self.columnValue += data
-
-    def endElement(self, name):
-        if self.columnValue is not None:
-            value = self.columnValue
+    def _GetRowFromElement(self, element):
+        row = [None] * len(self.columnIndexes)
+        for subElement in element:
+            name = subElement.tag.upper()
+            value = subElement.text
             if not value:
                 value = None
-            name = name.upper()
-            columnIndex = self.columnIndexes[name]
             if value is not None and name in self.dateColumns:
-                dateValue = time.strptime(self.columnValue, self.dateFormat)
-                value = cx_Oracle.Timestamp(*dateValue[:6])
-            else:
-                value = str(self.columnValue)
-            self.row[columnIndex] = value
-            self.columnValue = None
-            self.allowCustomTags = True
-        else:
-            cx_XML.Parser.endElement(self, name)
+                dateValue = time.strptime(value, self.dateFormat)
+                value = self.connection.Timestamp(*dateValue[:6])
+            columnIndex = self.columnIndexes[subElement.tag.upper()]
+            row[columnIndex] = value
+        return row
 
-    def end_ROW(self):
-        self.rowsImported += 1
-        commit = (self.commitPoint \
-                and self.rowsImported % self.commitPoint == 0)
-        if commit or len(self.rowsToInsert) == self.cursor.arraysize:
-            self.cursor.executemany(None, self.rowsToInsert)
-            self.rowsToInsert = []
-            if commit:
-                self.connection.commit()
-        if self.reportPoint and self.rowsImported % self.reportPoint == 0:
-            print "%d rows imported." % self.rowsImported
-        self.allowCustomTags = False
-
-    def end_ROWSET(self):
-        if self.rowsToInsert:
-            self.cursor.executemany(None, self.rowsToInsert)
-        if self.commitPoint is None \
-                or self.rowsImported % self.commitPoint != 0:
+    def Process(self, inputFile):
+        rowsImported = 0
+        rowsToInsert = []
+        for event, elem in cElementTree.iterparse(inputFile):
+            if elem.tag != "ROW":
+                continue
+            row = self._GetRowFromElement(elem)
+            rowsToInsert.append(row)
+            rowsImported += 1
+            commit = (self.commitPoint \
+                    and rowsImported % self.commitPoint == 0)
+            if commit or len(rowsToInsert) == self.cursor.arraysize:
+                self.cursor.executemany(None, rowsToInsert)
+                rowsToInsert = []
+                if commit:
+                    self.connection.commit()
+            if self.reportPoint and rowsImported % self.reportPoint == 0:
+                cx_Logging.Trace("%d rows imported.", rowsImported)
+            elem.clear()
+        if rowsToInsert:
+            self.cursor.executemany(None, rowsToInsert)
+        if self.commitPoint is None or rowsImported % self.commitPoint != 0:
             self.connection.commit()
-        if self.reportPoint is None \
-                or self.rowsImported % self.reportPoint != 0:
-            print "%d rows imported." % self.rowsImported
-
-    def startElement(self, name, attrs):
-        if self.allowCustomTags:
-            self.columnValue = ""
-            self.allowCustomTags = False
-        else:
-            cx_XML.Parser.startElement(self, name, attrs)
-
-    def start_ROW(self, num = None):
-        self.row = [None] * len(self.columnIndexes)
-        self.rowsToInsert.append(self.row)
-        self.allowCustomTags = True
-
-    def start_ROWSET(self):
-        self.rowsToInsert = []
-
+        if self.reportPoint is None or rowsImported % self.reportPoint != 0:
+            cx_Logging.Trace("%d rows imported.", rowsImported)
 
 # parse the XML data stream
 if options.fileName == "-":
@@ -133,9 +114,5 @@ if options.fileName == "-":
 else:
     inputFile = file(options.fileName, "r")
 handler = Handler(options)
-parser = xml.sax.make_parser()
-parser.setContentHandler(handler)
-parser.parse(inputFile)
-
-print >> sys.stderr, "Done."
+handler.Process(inputFile)
 

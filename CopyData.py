@@ -6,6 +6,7 @@ import cx_Logging
 import cx_LoggingOptions
 import cx_OptionParser
 import cx_OracleUtils
+import os
 
 import Options
 
@@ -64,7 +65,9 @@ cursor = destConnection.cursor()
 # determine query to execute
 sourceSQL = options.source.strip()
 destinationTable = options.destination
-if " " not in sourceSQL:
+if not sourceSQL.lower().startswith("select ") and os.path.isfile(sourceSQL):
+    sourceSQL = file(sourceSQL).read().strip()
+elif " " not in sourceSQL:
     if destinationTable is None:
         destinationTable = sourceSQL
     sourceInfo = cx_OracleUtils.GetObjectInfo(sourceConnection, sourceSQL)
@@ -87,10 +90,11 @@ destTableOwner, destTableName, destTableType = destInfo
 # determine columns in source query
 colPos = 0
 sourceColumns = {}
-definedVars = sourceCursor.execute(sourceSQL)
+sourceVars = sourceCursor.execute(sourceSQL)
 for colName, colType, colDisplaySize, colInternalSize, colPrecision, \
         colScale, colNullOk in sourceCursor.description:
-    sourceColumns[colName] = (colPos, colType)
+    isLob = colType in (sourceConnection.CLOB, sourceConnection.BLOB)
+    sourceColumns[colName] = (colPos, colType, isLob)
     colPos += 1
 
 # lookup columns on destination table
@@ -99,12 +103,12 @@ cursor.execute("""
         column_name,
         nullable
       from all_tab_columns
-      where owner = :p_Owner
-        and table_name = :p_Name""",
-      p_Owner = destTableOwner,
-      p_Name = destTableName)
+      where owner = :owner
+        and table_name = :name""",
+      owner = destTableOwner,
+      name = destTableName)
 destColumns = {}
-for name, nullable in cursor.fetchall():
+for name, nullable in cursor:
     destColumns[name] = (nullable == "Y")
 
 # determine the list of key columns to use, if necessary
@@ -116,12 +120,12 @@ if options.checkExists:
         cursor.execute("""
                 select constraint_name
                 from all_constraints
-                where owner = :p_Owner
-                  and table_name = :p_Name
+                where owner = :owner
+                  and table_name = :name
                   and constraint_type in ('P', 'U')
                 order by constraint_type""",
-                p_Owner = destTableOwner,
-                p_Name = destTableName)
+                owner = destTableOwner,
+                name = destTableName)
         row = cursor.fetchone()
         if not row:
             raise "No primary or unique constraint found on table"
@@ -129,41 +133,24 @@ if options.checkExists:
         cursor.execute("""
                 select column_name
                 from all_cons_columns
-                where owner = :p_Owner
-                  and constraint_name = :p_Name""",
-                p_Owner = destTableOwner,
-                p_Name = constraintName)
-        keyColumns = [n for n, in cursor.fetchall()]
+                where owner = :owner
+                  and constraint_name = :name""",
+                owner = destTableOwner,
+                name = constraintName)
+        keyColumns = [n for n, in cursor]
     for name in keyColumns:
         if name not in sourceColumns:
             raise "Key column %s not in source query" % name
 
 # match the columns; all of the source or all of the destination columns must
 # match for a valid copy
-bindVariables = {}
-keyBindVariables = {}
-bindVariableXref = []
-destBindVariableXref = []
-for name in sourceColumns:
-    if name in destColumns:
-        colPos, colType = sourceColumns[name]
-        bindVarName = "p_Val_%d" % colPos
-        isLob = str(definedVars[colPos]).startswith("<Lob")
-        if options.checkExists or isLob:
-            bindVariables[bindVarName] = colType
-            bindVariableXref.append((colPos, bindVarName, isLob))
-        else:
-            bindVariables[bindVarName] = definedVars[colPos]
-        destBindVariableXref.append((name, ":%s" % bindVarName))
-        if options.checkExists and name in keyColumns:
-            keyBindVariables[bindVarName] = bindVariables[bindVarName]
-if len(bindVariables) not in (len(sourceColumns), len(destColumns)):
+matchingColumns = [n for n in sourceColumns if n in destColumns]
+if len(matchingColumns) not in (len(sourceColumns), len(destColumns)):
     raise "All source columns or all destination columns must match by name"
 
 # set up insert cursor
-insertNames = [cx_OracleUtils.IdentifierRepr(n) \
-        for n, v in destBindVariableXref]
-insertValues = [v for n, v in destBindVariableXref]
+insertNames = [cx_OracleUtils.IdentifierRepr(n) for n in matchingColumns]
+insertValues = [":%s" % (i + 1) for i, n in enumerate(matchingColumns)]
 statement = "insert into %s.%s (%s) values (%s)" % \
         (cx_OracleUtils.IdentifierRepr(destTableOwner),
          cx_OracleUtils.IdentifierRepr(destTableName),
@@ -171,42 +158,70 @@ statement = "insert into %s.%s (%s) values (%s)" % \
 insertCursor = cursor
 insertCursor.bindarraysize = sourceCursor.arraysize
 insertCursor.prepare(statement)
-vars = insertCursor.setinputsizes(**bindVariables)
-insertVars = [(definedVars[p], vars[n], b) for p, n, b in bindVariableXref]
+vars = []
+insertVars = []
+for name in matchingColumns:
+    colPos, colType, isLob = sourceColumns[name]
+    sourceVar = sourceVars[colPos]
+    if options.checkExists or isLob:
+        targetVar = insertCursor.var(colType, sourceVar.maxlength)
+        insertVars.append((sourceVar, targetVar, isLob))
+    else:
+        targetVar = sourceVar
+    vars.append(targetVar)
+insertCursor.setinputsizes(*vars)
 
 # set up exists cursor
 if options.checkExists:
-    whereClauses = [cx_OracleUtils.WhereClause(n, v, destColumns[n], 1) \
-            for n, v in destBindVariableXref if n in keyColumns]
-    statement = "select count(1) from %s.%s where %s" % \
+    method = cx_OracleUtils.WhereClause
+    whereClauses = [method(n, ":%s" % (i + 1), destColumns[n], True) \
+            for i, n in enumerate(keyColumns)]
+    statement = "select count(*) from %s.%s where %s" % \
             (cx_OracleUtils.IdentifierRepr(destTableOwner),
              cx_OracleUtils.IdentifierRepr(destTableName),
              " and ".join(whereClauses))
     existsCursor = destConnection.cursor()
     existsCursor.prepare(statement)
-    vars = existsCursor.setinputsizes(**keyBindVariables)
-    existsVars = [(definedVars[p], vars[n], b) \
-            for p, n, b in bindVariableXref if n in vars]
+    vars = []
+    existsVars = []
+    for name in keyColumns:
+        colPos, colType, isLob = sourceColumns[name]
+        sourceVar = sourceVars[colPos]
+        targetVar = existsCursor.var(colType, sourceVar.maxlength)
+        vars.append(targetVar)
+        existsVars.append((sourceVar, targetVar, isLob))
+    existsCursor.setinputsizes(*vars)
 
 # set up update cursor
 updateCursor = None
-if options.checkExists and len(keyColumns) != len(bindVariables):
-    setClauses = [cx_OracleUtils.IdentifierRepr(n) + " = " + v \
-            for n, v in destBindVariableXref if n not in keyColumns]
+if options.checkExists and len(keyColumns) != len(matchingColumns):
+    updateColumns = [n for n in matchingColumns if n not in keyColumns] + \
+            keyColumns
+    setClauses = ["%s = :%s" % (cx_OracleUtils.IdentifierRepr(n), i + 1) \
+            for i, n in enumerate(updateColumns) if n not in keyColumns]
+    whereClauses = [method(n, ":%s" % (i + 1), destColumns[n], True) \
+            for i, n in enumerate(updateColumns) if n in keyColumns]
     statement = "update %s.%s set %s where %s" % \
             (cx_OracleUtils.IdentifierRepr(destTableOwner),
              cx_OracleUtils.IdentifierRepr(destTableName),
              ",".join(setClauses), " and ".join(whereClauses))
     if options.checkModified:
         additionalWhereClauses = \
-                [cx_OracleUtils.WhereClause(n, v, destColumns[n], 0) \
-                for n, v in destBindVariableXref if n not in keyColumns]
+                [method(n, ":%s" % (i + 1), destColumns[n], False) \
+                for i, n in enumerate(updateColumns) if n not in keyColumns]
         statement += " and (%s)" % " or ".join(additionalWhereClauses)
     updateCursor = destConnection.cursor()
     updateCursor.bindarraysize = sourceCursor.arraysize
     updateCursor.prepare(statement)
-    vars = updateCursor.setinputsizes(**bindVariables)
-    updateVars = [(definedVars[p], vars[n], b) for p, n, b in bindVariableXref]
+    vars = []
+    updateVars = []
+    for name in updateColumns:
+        colPos, colType, isLob = sourceColumns[name]
+        sourceVar = sourceVars[colPos]
+        targetVar = updateCursor.var(colType, sourceVar.maxlength)
+        updateVars.append((sourceVar, targetVar, isLob))
+        vars.append(targetVar)
+    updateCursor.setinputsizes(*vars)
 
 # tell user what is happening
 cx_Logging.Trace("Copying data...")
@@ -227,17 +242,22 @@ insertPos = 0
 updatePos = 0
 lastCommitted = 0
 lastReported = 0
+totalRowsFetched = 0
 iter = range(sourceCursor.arraysize)
 reportPoint = options.reportPoint
 commitPoint = options.commitPoint
+rowLimit = options.rowLimit
 if reportPoint is None and commitPoint is not None:
     reportPoint = commitPoint
 
 # perform the copy
 while True:
     rowsFetched = sourceCursor.fetchraw()
+    if rowLimit is not None and totalRowsFetched + rowsFetched > rowLimit:
+        rowsFetched = rowLimit - totalRowsFetched
     if not rowsFetched:
         break
+    totalRowsFetched += rowsFetched
     if not insertVars:
         insertPos = rowsFetched
     else:
@@ -246,11 +266,10 @@ while True:
         for pos in iter:
             exists = 0
             if options.checkExists:
-                for definedVar, boundVar, isLob in existsVars:
-                    boundVar.copy(definedVar, pos, 0)
-                vars = existsCursor.execute(None)
-                existsCursor.fetchraw()
-                exists = vars[0].getvalue()
+                for sourceVar, targetVar, isLob in existsVars:
+                    targetVar.copy(sourceVar, pos, 0)
+                existsCursor.execute(None, [])
+                exists, = existsCursor.fetchone()
             if not exists:
                 targetPos = insertPos
                 targetVars = insertVars
@@ -262,12 +281,12 @@ while True:
             else:
                 unmodifiedRows += 1
                 targetVars = []
-            for definedVar, boundVar, isLob in targetVars:
+            for sourceVar, targetVar, isLob in targetVars:
                 if isLob:
-                    boundVar.setvalue(targetPos,
-                           definedVar.getvalue(pos).read())
+                    targetVar.setvalue(targetPos,
+                           sourceVar.getvalue(pos).read())
                 else:
-                    boundVar.copy(definedVar, pos, targetPos)
+                    targetVar.copy(sourceVar, pos, targetPos)
     if insertPos:
         insertCursor.executemanyprepared(insertPos)
         insertedRows += insertPos
@@ -277,16 +296,16 @@ while True:
         modifiedRows += updateCursor.rowcount
         unmodifiedRows += (updatePos - updateCursor.rowcount)
         updatePos = 0
-    if reportPoint and sourceCursor.rowcount - lastReported >= reportPoint:
-        lastReported = sourceCursor.rowcount
-        cx_Logging.Trace("  %s rows processed", sourceCursor.rowcount)
-    if commitPoint and sourceCursor.rowcount - lastCommitted >= commitPoint:
-        lastCommitted = sourceCursor.rowcount
+    if reportPoint and totalRowsFetched - lastReported >= reportPoint:
+        lastReported = totalRowsFetched
+        cx_Logging.Trace("  %s rows processed", totalRowsFetched)
+    if commitPoint and totalRowsFetched - lastCommitted >= commitPoint:
+        lastCommitted = totalRowsFetched
         destConnection.commit()
 destConnection.commit()
 
 # print out final statistics
-cx_Logging.Trace("%s rows retrieved from source.", sourceCursor.rowcount)
+cx_Logging.Trace("%s rows retrieved from source.", totalRowsFetched)
 cx_Logging.Trace("%s rows created in destination.", insertedRows)
 cx_Logging.Trace("%s rows modified in destination.", modifiedRows)
 cx_Logging.Trace("%s rows unmodified in destination.", unmodifiedRows)

@@ -55,6 +55,6 @@ for statement in cx_SQL.ParseStatementsInFile(options.sourceFileName):
 # recompile the invalid objects in the schema, if applicable
 if options.withRecompile:
     cx_OracleUtils.RecompileInvalidObjects(connection,
-            [connection.username.upper()], [], connection.password,
-            not options.onRecompileErrorContinue)
+            [connection.username.upper()],
+            raiseError = not options.onRecompileErrorContinue)
 
