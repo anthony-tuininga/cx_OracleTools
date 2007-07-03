@@ -1,0 +1,72 @@
+Changes from 7.3 to 7.4
+ 1) Use cx_Logging to output messages rather than write directly to stderr.
+ 2) Added support for describing comments on tables and columns.
+ 3) Improved output when an exception occurs.
+ 4) cx_Oracle 4.2 is now required.
+ 5) Replace use of executemanyprepared() with executemany() and bind arrays
+    instead of dictionaries which actually improves performance by about 20-25%
+    in some cases.
+ 6) Moved code from module cx_DumpData in project cx_PyOracleLib into DumpData.
+ 7) Provide more meaningful message when source or target directory is missing
+    in GeneratePatch as requested by Micah Friesen.
+ 8) Ignore invalid objects of type "UNDEFINED" when describing objects.
+ 9) Export the roles before the users as the reason the roles are included is
+    because they are administered by the users and the grants will by
+    definition fail.
+10) In ExportObjects, create the directory before any exporting actually takes
+    place in order to handle the situation when no objects are exported as
+    requested by Micah Friesen.
+11) Eliminated identical grants made by different users when describing
+    objects.
+12) Add phrase "(n% of file)" to the reporting message of ImportData when
+    possible as requested by Don Reid.
+13) Display something more reasonable when compiling statements that modify
+    constraints.
+
+Changes from 7.2 to 7.3
+ 1) Added ExportXML and ImportXML utilities for importing and exporting data
+    from an Oracle database as XML.
+ 2) Added support in ExportData for limiting the number of rows exported and
+    skipping some rows first.
+ 3) Added support in CopyData for the case where all the columns on the target
+    table form the primary key.
+ 4) Added support for case sensitive tables and column names in CopyData.
+ 5) Added option --report-point to CopyData which defaults to --commit-point.
+ 6) Added options --log-file, --log-level and --log-prefix to all of the tools
+    and removed --timestamp and --prefix on DbDebugger since the new options
+    cover the functionality of the old ones.
+ 7) Added options --suppress-owner-dir, --include-roles, --include-users,
+    --no-related and --no-triggers to ExportObjects.
+ 8) Added option --sort-by to DumpData to modify the query executed to include
+    a sort clause.
+ 9) Added option --only-if to DescribeSchema and ExportObjects which allows
+    for filtering the objects described by a where clause against dba_objects.
+10) DbDebugger now displays the time to the microsecond if desired.
+11) GeneratePatch now makes sure that owner changes are displayed before
+    displaying anything about the objects for that owner that are being
+    patched.
+12) GeneratePatch now produces consistent results by performing a sort before
+    displaying any results.
+13) Fixed bug in GeneratePatch parsing grants with the "with grant option"
+    specified.
+14) Fixed bug in DescribeObject where connect statements were being displayed.
+
+Changes from 7.1 to 7.2
+ 1) Added new tools ExportColumn and ImportColumn for exporting (importing)
+    CLOB and BLOB columns from (into) an Oracle database.
+ 2) Include package used for debugging.
+ 3) When using DescribeObject, check if the object with the given name matches
+    an object in the database, including case. If the object cannot be found,
+    check for an object in the database by converting the argument to
+    uppercase. Finally, if the name is not found and is not qualified with a
+    schema owner, search the public synonyms for one by that name and describe
+    that object instead.
+ 4) Added feedback to DbDebugger indicating on what database the connection
+    has been established and on what pipe name the debugger is listening.
+ 5) Added optional argument to specify a filename into which to put the output
+    created by DescribeObject. This is of particular use on Windows which
+    doesn't handle redirection very well, particularly in GUI programs.
+
+Changes for 7.1
+ 1) First introduced to the public.
+
