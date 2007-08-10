@@ -1,6 +1,7 @@
 """Describes objects in a database in a way suitable for creating the object
 in a database."""
 
+import cx_Exceptions
 import cx_LoggingOptions
 import cx_OptionParser
 import cx_OracleObject
@@ -38,45 +39,16 @@ cx_LoggingOptions.ProcessOptions(options)
 connection = cx_OracleUtils.Connect(options.schema)
 environment = cx_OracleObject.Environment(connection, options)
 
+# determine the owner, name and type of the object
+objectOwner, objectName, objectType = \
+        environment.ObjectInfo(options.objectName)
+
 # open the file
 if options.fileName is None or options.fileName == "-":
     outFile = sys.stdout
 else:
     outFile = file(options.fileName, "w")
 describer = cx_OracleObject.Describer(environment, options, outFile)
-
-# determine the object and its owner
-objectName = options.objectName
-isFullyQualified = "." in objectName
-if isFullyQualified:
-    objectOwner, objectName = objectName.split(".")
-else:
-    objectOwner = connection.username.upper()
-
-# determine the type of object
-objectType = cx_OracleObject.ObjectType(environment, objectOwner, objectName)
-if objectType is None:
-    objectOwner = objectOwner.upper()
-    objectName = objectName.upper()
-    objectType = cx_OracleObject.ObjectType(environment, objectOwner,
-            objectName)
-if objectType is None and not isFullyQualified:
-    cursor = connection.cursor()
-    cursor.execute("""
-            select
-              table_owner,
-              table_name
-            from %s_synonyms
-            where owner = 'PUBLIC'
-              and synonym_name = :objectName""" % environment.ViewPrefix(),
-            objectName = objectName)
-    row = cursor.fetchone()
-    if row is not None:
-        objectOwner, objectName = row
-        objectType = cx_OracleObject.ObjectType(environment, objectOwner,
-                objectName)
-if objectType is None:
-    raise "Object %s.%s does not exist." % (objectOwner, objectName)
 
 # perform the actual describe
 describer.schemas = [objectOwner]
