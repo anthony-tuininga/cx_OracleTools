@@ -1,6 +1,7 @@
 README.txt
 LICENSE.txt
 HISTORY.txt
+setup.py
 CompileSource.py
 CopyData.py
 DbDebugger.py
