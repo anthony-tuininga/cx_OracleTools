@@ -21,17 +21,19 @@ executables = [
         Executable("RecompileSource.py"),
 ]
 
-freezeOptions = dict(
-        compressed = False)
+options = dict(
+        compressed = True,
+        create_shared_zip = False,
+        append_script_to_exe = True)
 
 setup(
         name = "cx_OracleTools",
-        version = "7.5",
+        version = "7.5b1",
         description = "Set of tools for managing Oracle data and source code.",
         license = "See LICENSE.txt",
         author = "Anthony Tuininga",
         author_email = "anthony.tuininga@gmail.com",
         url = "http://cx-oracletools.sourceforge.net",
         executables = executables,
-        options = dict(freeze = freezeOptions))
+        options = dict(freeze = options))
 
