@@ -21,10 +21,10 @@ executables = [
         Executable("RecompileSource.py"),
 ]
 
-options = dict(
-        compressed = True,
-        create_shared_zip = False,
-        append_script_to_exe = True)
+buildOptions = dict(
+        compressed = True)
+msiOptions = dict(
+        upgrade_code = "{A77F0AB1-3E2A-4242-B6DD-700CF582345C}")
 
 setup(
         name = "cx_OracleTools",
@@ -35,5 +35,5 @@ setup(
         author_email = "anthony.tuininga@gmail.com",
         url = "http://cx-oracletools.sourceforge.net",
         executables = executables,
-        options = dict(freeze = options))
+        options = dict(build_exe = buildOptions, bdist_msi = msiOptions))
 
