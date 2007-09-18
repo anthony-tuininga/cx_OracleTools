@@ -100,7 +100,9 @@ executables = [
 ]
 
 buildOptions = dict(
-        compressed = True)
+        compressed = True,
+        optimize = 2,
+        replace_paths = [("*", "")])
 msiOptions = dict(
         upgrade_code = "{A77F0AB1-3E2A-4242-B6DD-700CF582345C}")
 
