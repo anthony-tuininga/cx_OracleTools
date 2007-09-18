@@ -2,6 +2,7 @@
 
 import cx_LoggingOptions
 import cx_OptionParser
+import cx_Oracle
 import cx_OracleUtils
 import datetime
 import os
@@ -45,9 +46,11 @@ for row in cursor:
                 and not isinstance(value, datetime.datetime):
             value = datetime.datetime(value.year, value.month, value.day,
                     value.hour, value.minute, value.second)
-        values.append(cx_OracleUtils.GetConstantRepr(value))
+        binaryData = description[i][1] in (cx_Oracle.BLOB, cx_Oracle.BINARY)
+        values.append(cx_OracleUtils.GetConstantRepr(value, binaryData))
     if names:
         sql = "insert into %s (\n  %s\n) values (\n  %s\n);\n" % \
                 (options.tableName, ",\n  ".join(names), ",\n  ".join(values))
         print sql
+print "commit;"
 
