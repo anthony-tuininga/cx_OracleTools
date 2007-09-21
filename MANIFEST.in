@@ -1,0 +1,4 @@
+include MANIFEST.in
+include *.py
+include *.sql
+include *.txt
