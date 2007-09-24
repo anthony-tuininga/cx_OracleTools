@@ -42,7 +42,10 @@ class build_exe(cx_Freeze.build_exe):
         module, = distribution.ext_modules
         command = distribution.get_command_obj("build_ext")
         command.ensure_finalized()
-        command.build_extensions()
+        if command.compiler is None:
+            command.run()
+        else:
+            command.build_extensions()
         dirName = os.path.join(sourceDir, command.build_lib)
         os.chdir(origDir)
         sys.path.insert(0, dirName)
@@ -99,12 +102,20 @@ executables = [
         cx_Freeze.Executable("RecompileSource.py"),
 ]
 
+if sys.version_info[:2] < (2, 5):
+    excludes = ["xml.etree"]
+else:
+    excludes = ["cElementTree"]
+
 buildOptions = dict(
         compressed = True,
         optimize = 2,
+        excludes = excludes,
         replace_paths = [("*", "")])
-msiOptions = dict(
-        upgrade_code = "{A77F0AB1-3E2A-4242-B6DD-700CF582345C}")
+options = dict(build_exe = buildOptions)
+if sys.platform == "win32" and sys.version_info[:2] >= (2, 5):
+    options["bdist_msi"] = dict(
+            upgrade_code = "{A77F0AB1-3E2A-4242-B6DD-700CF582345C}")
 
 cx_Freeze.setup(
         name = "cx_OracleTools",
@@ -117,5 +128,5 @@ cx_Freeze.setup(
         url = "http://cx-oracletools.sourceforge.net",
         cmdclass = dict(build_exe = build_exe),
         executables = executables,
-        options = dict(build_exe = buildOptions, bdist_msi = msiOptions))
+        options = options)
 
