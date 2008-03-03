@@ -21,12 +21,12 @@ parser.AddOption("--sql-in-file", action = "store_true",
         help = "SQL parameter is actually a file name in which the SQL is "
                "found")
 cx_LoggingOptions.AddOptions(parser)
-parser.AddArgument("connectString", required = 1,
+parser.AddArgument("connectString", required = True,
         help = "the string to use for connecting to the database")
-parser.AddArgument("sql", required = 1,
+parser.AddArgument("sql", required = True,
         help = "the SQL to execute or the name of a file in which the SQL "
                "is found if the --sql-in-file option is used")
-parser.AddArgument("fileName", required = 1,
+parser.AddArgument("fileName", required = True,
         help = "the name of the file in which to place the output")
 options = parser.Parse()
 cx_LoggingOptions.ProcessOptions(options)
@@ -65,18 +65,9 @@ gFieldSeparator = EvalString(options.fieldSep)
 gRecordSeparator = EvalString(options.recordSep)
 gStringEncloser = EvalString(options.stringEncloser)
 gEscapeCharacter = EvalString(options.escapeChar)
-while True:
-
-    # fetch a single row
-    row = cursor.fetchone()
-    if not row:
-        break
-
-    # dump the row
+for row in cursor:
     outFile.write(gFieldSeparator.join([StringRep(v) for v in row]))
     outFile.write(gRecordSeparator)
-
-    # report the number of rows dumped, if desired
     if options.reportPoint and cursor.rowcount % options.reportPoint == 0:
         print >> sys.stderr, " ", cursor.rowcount, "rows dumped."
 
