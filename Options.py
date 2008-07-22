@@ -31,6 +31,11 @@ DONT_MERGE_GRANTS = cx_OptionParser.Option("--dont-merge-grants",
         default = True, action = "store_false", dest = "mergeGrants",
         help = "do not merge the grants by grantee and privilege")
 
+INCLUDE_CONTEXTS = cx_OptionParser.Option("--include-contexts",
+        default = False, action = "store_true", dest = "includeContexts",
+        help = "include contexts in output which reference packages owned by "
+               "the schema")
+
 INCLUDE_ROLES = cx_OptionParser.Option("--include-roles", default = False,
         action = "store_true", dest = "includeRoles",
         help = "include roles in output which are administered by the schema")

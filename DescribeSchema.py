@@ -25,6 +25,7 @@ parser.AddOption(Options.ONLY_IF)
 parser.AddOption(Options.USE_DBA_VIEWS)
 parser.AddOption(Options.INCLUDE_ROLES)
 parser.AddOption(Options.INCLUDE_USERS)
+parser.AddOption(Options.INCLUDE_CONTEXTS)
 parser.AddOption(Options.MAX_LONG_SIZE)
 cx_LoggingOptions.AddOptions(parser)
 parser.AddArgument("fileName",
