@@ -1,7 +1,6 @@
 """Describes objects in a database in a way suitable for creating the object
 in a database."""
 
-import cx_Exceptions
 import cx_LoggingOptions
 import cx_OptionParser
 import cx_OracleObject

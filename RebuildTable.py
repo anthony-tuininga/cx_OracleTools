@@ -1,5 +1,6 @@
 """Generate a script for rebuilding a table."""
 
+import cx_Exceptions
 import cx_LoggingOptions
 import cx_OptionParser
 import cx_OracleObject
@@ -33,48 +34,23 @@ connection = cx_OracleUtils.Connect(options.schema)
 environment = cx_OracleObject.Environment(connection, options)
 describer = cx_OracleObject.Describer(environment, options)
 
-# determine the object and its owner
-tableName = options.tableName.upper()
-if "." in tableName:
-  tableOwner, tableName = tableName.split(".")
-else:
-  tableOwner = connection.username.upper()
+class ObjectNotATable(cx_Exceptions.BaseException):
+    message = "Object %(name)s is not a table."
 
 # determine the type of object
-cursor = connection.cursor()
-cursor.execute("""
-        select object_type
-        from %s_objects
-        where owner = :p_Owner
-          and object_name = :p_Name
-          and instr(object_type, 'BODY') = 0""" % environment.ViewPrefix(),
-        p_Owner = tableOwner,
-        p_Name = tableName)
-row = cursor.fetchone()
-if not row:
-    raise "Object %s.%s does not exist." % (tableOwner, tableName)
-objType, = row
+owner, name, objType = environment.ObjectInfo(options.tableName)
 if objType != "TABLE":
-    raise "Object %s.%s is not a table." % (tableOwner, tableName)
+    raise ObjectNotATable(name = options.tableName)
 
 # perform the describe
-table = cx_OracleObject.ObjectByType(environment, tableOwner, tableName,
-        objType)
-cursor.execute("""
-        select column_name
-        from %s_tab_columns
-        where owner = :p_Owner
-          and table_name = :p_Name
-        order by column_id""" % environment.ViewPrefix(),
-        p_Owner = tableOwner,
-        p_Name = tableName)
-columnNames = [n for n, in cursor.fetchall()]
+table = environment.ObjectByType(owner, name, objType)
+columnNames = [c[0] for c in table.columns]
 
 # produce the output
 print "whenever sqlerror exit failure"
 print "whenever oserror exit failure"
 print
-print "rename", tableName, "to bk;"
+print "rename", name, "to bk;"
 print
 table.Export(sys.stdout, options.wantTablespace, options.wantStorage)
 if options.wantGrants:
@@ -83,10 +59,10 @@ if options.withCopydata:
     selectClauses = ", ".join(columnNames)
     print "!CopyData --no-check-exists --commit-point 250 --array-size 250",
     print "'select %s from bk'" % selectClauses,
-    print tableName
+    print name
 else:
     selectClauses = ",\n  ".join(columnNames)
-    print "insert /*+ append */ into", tableName, "nologging"
+    print "insert /*+ append */ into", name, "nologging"
     print "select\n  %s\nfrom bk;" %  selectClauses
     print
     print "commit;"
