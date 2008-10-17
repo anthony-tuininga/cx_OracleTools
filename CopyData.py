@@ -90,7 +90,8 @@ destTableOwner, destTableName, destTableType = destInfo
 # determine columns in source query
 colPos = 0
 sourceColumns = {}
-sourceVars = sourceCursor.execute(sourceSQL)
+sourceCursor.execute(sourceSQL)
+sourceVars = sourceCursor.fetchvars
 for colName, colType, colDisplaySize, colInternalSize, colPrecision, \
         colScale, colNullOk in sourceCursor.description:
     isLob = colType in (sourceConnection.CLOB, sourceConnection.BLOB)
