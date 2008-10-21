@@ -7,13 +7,9 @@ import cx_OracleUtils
 import _strptime
 import sys
 import time
+import xml.etree.cElementTree
 
 import Options
-
-try:
-    import cElementTree
-except ImportError:
-    from xml.etree import cElementTree
 
 # parse command line
 parser = cx_OptionParser.OptionParser("ImportXML")
@@ -85,7 +81,7 @@ class Handler(object):
     def Process(self, inputFile):
         rowsImported = 0
         rowsToInsert = []
-        for event, elem in cElementTree.iterparse(inputFile):
+        for event, elem in xml.etree.cElementTree.iterparse(inputFile):
             if elem.tag != "ROW":
                 continue
             row = self._GetRowFromElement(elem)

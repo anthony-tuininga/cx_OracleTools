@@ -102,18 +102,12 @@ executables = [
         cx_Freeze.Executable("RecompileSource.py"),
 ]
 
-if sys.version_info[:2] < (2, 5):
-    excludes = ["xml.etree"]
-else:
-    excludes = ["cElementTree"]
-
 buildOptions = dict(
         compressed = True,
         optimize = 2,
-        excludes = excludes,
         replace_paths = [("*", "")])
 options = dict(build_exe = buildOptions)
-if sys.platform == "win32" and sys.version_info[:2] >= (2, 5):
+if sys.platform == "win32":
     options["bdist_msi"] = dict(
             upgrade_code = "{A77F0AB1-3E2A-4242-B6DD-700CF582345C}")
 
