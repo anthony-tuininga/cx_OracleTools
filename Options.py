@@ -60,6 +60,10 @@ NAMES = cx_OptionParser.Option("--name", default = [],
         action = "append", dest = "schemas", metavar = "NAME",
         help = "export objects found in schemas with the given names")
 
+NAMES_FILE = cx_OptionParser.Option("--name-file", metavar = "FILE",
+        help = "export objects found in schemas with the given names "
+               "found in the specified file")
+
 NO_COMMENTS = cx_OptionParser.Option("--no-comments", default = True,
         action = "store_false", dest = "wantComments",
         help = "exclude comments made on objects")
