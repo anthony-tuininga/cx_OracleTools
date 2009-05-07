@@ -24,13 +24,16 @@ ImportXML - import data from an XML file (such as those created by ExportXML)
 RebuildTable - generate SQL script to rebuild the table
 RecompileSource - recompile all invalid objects in the database
 
-This project depends on the cx_PyGenLib and cx_PyOracleLib and cx_Oracle
-projects. These must be installed before using these scripts if you are
-running in source mode. If you are using the binary version, these projects
-can be safely ignored. The binary versions of these tools were built with
-cx_Freeze. Each of these projects can be found at
+This project depends on the following projects if used in source mode. If you
+are using the binary version these dependencies can be safely ignored.
 
-http://starship.python.net/crew/atuining
+cx_PyGenLib - http://cx-pygenlib.sourceforge.net
+cx_PyOracleLib - http://cx-pyoraclelib.sourceforge.net
+cx_Oracle - http://cx-oracle.sourceforge.net
+
+The binary versions of these tools were built with cx_Freeze.
+
+cx_Freeze - http://cx-freeze.sourceforge.net
 
 This project is released under a free software license. See LICENSE.txt for
 more details.
