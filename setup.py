@@ -1,23 +1,5 @@
-import distutils.core
 import cx_Freeze
-import os
 import sys
-
-DEPENDENT_PROJECTS = [
-        ("cx_Logging", "trunk"),
-        ("cx_Oracle", "trunk"),
-        ("cx_PyGenLib", "trunk"),
-        ("cx_PyOracleLib", "trunk")
-]
-
-for projInfo in DEPENDENT_PROJECTS:
-    name = projInfo[0]
-    envName = "%s_SOURCE" % name.upper()
-    value = os.environ.get(envName)
-    if value is None:
-        value = os.path.realpath(os.path.join("..", "..", *projInfo))
-        if os.path.isdir(value):
-            os.environ[envName] = value
 
 class build_exe(cx_Freeze.build_exe):
     user_options = cx_Freeze.build_exe.user_options + [
@@ -26,40 +8,6 @@ class build_exe(cx_Freeze.build_exe):
             ('cx-pygenlib=', None, 'location of cx_PyGenLib sources'),
             ('cx-pyoraclelib=', None, 'location of cx_PyOracleLib sources')
     ]
-
-    def _build_extension(self, name):
-        sourceDir = getattr(self, name.lower())
-        if sourceDir is None:
-            return
-        origDir = os.getcwd()
-        scriptArgs = ["build"]
-        command = self.distribution.get_command_obj("build")
-        if command.compiler is not None:
-            scriptArgs.append("--compiler=%s" % command.compiler)
-        os.chdir(sourceDir)
-        print "building", name, "in", sourceDir
-        distribution = distutils.core.run_setup("setup.py", scriptArgs)
-        module, = distribution.ext_modules
-        command = distribution.get_command_obj("build_ext")
-        command.ensure_finalized()
-        if command.compiler is None:
-            command.run()
-        else:
-            command.build_extensions()
-        dirName = os.path.join(sourceDir, command.build_lib)
-        os.chdir(origDir)
-        sys.path.insert(0, dirName)
-
-    def _set_source_location(self, name, addToPath = True):
-        envName = "%s_SOURCE" % name.upper()
-        value = getattr(self, name.lower())
-        if value is None:
-            value = os.environ.get(envName)
-        if value is not None:
-            setattr(self, name.lower(), value)
-            os.environ[envName] = value
-            if addToPath:
-                sys.path.insert(0, value)
 
     def initialize_options(self):
         cx_Freeze.build_exe.initialize_options(self)
@@ -70,14 +18,16 @@ class build_exe(cx_Freeze.build_exe):
 
     def finalize_options(self):
         cx_Freeze.build_exe.finalize_options(self)
-        self._set_source_location("cx_Logging", addToPath = False)
-        self._set_source_location("cx_Oracle", addToPath = False)
-        self._set_source_location("cx_PyGenLib")
-        self._set_source_location("cx_PyOracleLib")
+        self.set_source_location("cx_Logging", "trunk")
+        self.set_source_location("cx_Oracle", "trunk")
+        self.set_source_location("cx_PyGenLib", "trunk")
+        self.set_source_location("cx_PyOracleLib", "trunk")
 
     def run(self):
-        self._build_extension("cx_Logging")
-        self._build_extension("cx_Oracle")
+        self.build_extension("cx_Logging")
+        self.build_extension("cx_Oracle")
+        self.add_to_path("cx_PyGenLib")
+        self.add_to_path("cx_PyOracleLib")
         cx_Freeze.build_exe.run(self)
 
 
@@ -113,7 +63,7 @@ if sys.platform == "win32":
 
 cx_Freeze.setup(
         name = "cx_OracleTools",
-        version = "7.5b1",
+        version = "7.5b2",
         description = "Tools for managing Oracle data and source code.",
         long_description = "Tools for managing Oracle data and source code.",
         license = "See LICENSE.txt",
