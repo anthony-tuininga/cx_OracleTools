@@ -1,12 +1,10 @@
 """Export data from a set of tables in a format suitable for importing to any
 Oracle database on any platform."""
 
-import cStringIO
 import cx_ExportData
 import cx_LoggingOptions
 import cx_OptionParser
 import cx_OracleUtils
-import os
 import sys
 
 import Options

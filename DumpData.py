@@ -5,8 +5,6 @@ import cx_OptionParser
 import cx_Oracle
 import cx_OracleUtils
 import datetime
-import os
-import sys
 
 # parse command line
 parser = cx_OptionParser.OptionParser("DumpData")
