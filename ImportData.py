@@ -5,7 +5,6 @@ import cx_Logging
 import cx_LoggingOptions
 import cx_OptionParser
 import cx_OracleUtils
-import os
 import sys
 
 import Options

@@ -4,7 +4,6 @@ import cx_Logging
 import cx_LoggingOptions
 import cx_OptionParser
 import cx_OracleUtils
-import _strptime
 import sys
 import time
 import xml.etree.cElementTree

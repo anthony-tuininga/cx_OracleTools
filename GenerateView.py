@@ -5,7 +5,6 @@ import cx_OptionParser
 import cx_Oracle
 import cx_OracleObject
 import cx_OracleUtils
-import os
 import sys
 
 # parse command line
