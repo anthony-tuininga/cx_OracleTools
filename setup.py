@@ -32,7 +32,6 @@ class build_exe(cx_Freeze.build_exe):
 
 
 executables = [
-        cx_Freeze.Executable("CompileSource.py"),
         cx_Freeze.Executable("CopyData.py"),
         cx_Freeze.Executable("DbDebugger.py"),
         cx_Freeze.Executable("DescribeObject.py"),
@@ -48,6 +47,7 @@ executables = [
         cx_Freeze.Executable("ImportColumn.py"),
         cx_Freeze.Executable("ImportData.py"),
         cx_Freeze.Executable("ImportXML.py"),
+        cx_Freeze.Executable("PatchDB.py"),
         cx_Freeze.Executable("RebuildTable.py"),
         cx_Freeze.Executable("RecompileSource.py"),
 ]
