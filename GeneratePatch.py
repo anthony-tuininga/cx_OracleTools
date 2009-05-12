@@ -6,8 +6,8 @@ objects."""
 import cx_LoggingOptions
 import cx_OptionParser
 import cx_OracleObject
+import cx_OracleParser
 import cx_OracleUtils
-import cx_SQL
 import cx_Utils
 import os
 import sys
@@ -29,8 +29,10 @@ parser.AddArgument("toDir", required = 1,
                "generated script")
 options = parser.Parse()
 cx_LoggingOptions.ProcessOptions(options)
+options.fromDir = os.path.normpath(options.fromDir)
 if not os.path.exists(options.fromDir):
     raise "Source (from directory) not found."
+options.toDir = os.path.normpath(options.toDir)
 if not os.path.exists(options.toDir):
     raise "Target (to directory) not found."
 
@@ -42,7 +44,15 @@ wantGrants = describer.wantGrants
 
 # define some constants
 CONSTRAINT_TYPES = ["PRIMARY KEY", "UNIQUE CONSTRAINT", "FOREIGN KEY",
-    "CHECK CONSTRAINT"]
+        "CHECK CONSTRAINT"]
+SOURCE_TYPES = ["FUNCTION", "PACKAGE", "PACKAGE BODY", "PROCEDURE", "TYPE",
+        "TYPE BODY", "VIEW"]
+
+# define parser and statement classes used
+parser = cx_OracleParser.SimpleParser()
+createConstraintClass = parser.parser.processor.CreateConstraintStatement
+createStatementClass = parser.parser.processor.CreateObjectStatement
+grantStatementClass = parser.parser.processor.GrantStatement
 
 # define a function which will return the list of objects in the files
 def ObjectsInFiles(files, baseDir):
@@ -53,14 +63,10 @@ def ObjectsInFiles(files, baseDir):
         dir, objOwner = os.path.split(dir)
         baseName = os.path.join(objOwner, objType, objName + ".sql").lower()
         file_ = os.path.join(baseDir, baseName)
-        for statement in cx_SQL.ParseStatementsInFile(file_):
-            if isinstance(statement, cx_SQL.AlterStatement):
-                statement.GetConstraintTypeAndName()
-            if isinstance(statement, cx_SQL.CreateStatement) \
-                    or isinstance(statement, cx_SQL.AlterStatement):
-                objType = statement.ObjectType().upper()
-                objName = statement.ObjectName().upper()
-                objs[(objOwner, objName, objType)] = baseName
+        for statement in parser.Parse(open(file_).read(), objOwner):
+            if isinstance(statement, createStatementClass):
+                key = (statement.owner, statement.name, statement.type.upper())
+                objs[key] = baseName
     return objs
 
 # define a function which will return the statements in a given file
@@ -68,15 +74,12 @@ def Statements(baseDir, baseName, objType, objName):
     found = 0
     statements = []
     fileName = os.path.join(baseDir, baseName)
-    for statement in cx_SQL.ParseStatementsInFile(fileName):
-        if isinstance(statement, cx_SQL.CreateStatement) \
-                or isinstance(statement, cx_SQL.AlterStatement):
+    for statement in parser.Parse(open(fileName).read()):
+        if isinstance(statement, createStatementClass):
             if found:
                 break
-            if isinstance(statement, cx_SQL.AlterStatement):
-                statement.GetConstraintTypeAndName()
-            found = (statement.ObjectType().upper() == objType
-                    and statement.ObjectName().upper() == objName)
+            found = (statement.type.upper() == objType
+                    and statement.name == objName)
         if found:
             statements.append(statement)
     return statements
@@ -88,13 +91,13 @@ def DependsOn(statement, objOwner, objName, objType):
     elif objType == "TYPE BODY":
         return (objOwner, objName, "TYPE")
     else:
-        words = statement.SQL().lower().split()
+        words = statement.sql.lower().split()
         if objType == "INDEX":
             return (objOwner, words[4].upper(), "TABLE")
         elif objType in ("UNIQUE INDEX", "BITMAP INDEX"):
             return (objOwner, words[5].upper(), "TABLE")
         elif objType in CONSTRAINT_TYPES:
-            return (objOwner, words[2].upper(), "TABLE")
+            return (statement.owner, statement.tableName, "TABLE")
         elif objType == "TRIGGER":
             index = words.index("on")
             return (objOwner, words[index].upper(), "TABLE")
@@ -114,7 +117,7 @@ def OutputDropStatement(statement, objsToDrop, objOwner, objName, objType,
     describer.SetOwner(objOwner, objType)
     if not hardDrop and objType == "TABLE":
         print "--",
-    if objType in CONSTRAINT_TYPES:
+    if objType == "CONSTRAINT":
         print "alter table", refName.lower()
     print "drop", objType.lower(), objName.lower() + ";"
     print
@@ -123,7 +126,7 @@ def OutputDropStatement(statement, objsToDrop, objOwner, objName, objType,
 def ParseGrants(statements):
     grants = {}
     for statement in statements:
-        statement = statement.SQL().replace("\n", " ").strip()[:-1]
+        statement = statement.sql.replace("\n", " ").strip()
         withGrantOption = ""
         if statement.endswith("with grant option"):
             withGrantOption = statement[-18:]
@@ -148,9 +151,8 @@ newObjs = ObjectsInFiles(modifiedFiles + newFiles, options.toDir)
 
 # sort the objects into three arrays for simpler processing
 preSourceObjs = [(o, n, t) for o, n, t in newObjs \
-        if t != "TRIGGER" and t not in cx_OracleObject.SOURCE_TYPES]
-sourceObjs = [(o, n, t) for o, n, t in newObjs \
-        if t in cx_OracleObject.SOURCE_TYPES]
+        if t != "TRIGGER" and t not in SOURCE_TYPES]
+sourceObjs = [(o, n, t) for o, n, t in newObjs if t in SOURCE_TYPES]
 postSourceObjs = [(o, n, t) for o, n, t in newObjs if t == "TRIGGER"]
 postSourceObjs.sort()
 
@@ -236,18 +238,19 @@ for obj in preSourceObjs + sourceObjs + postSourceObjs:
       print outputType, outputName
       print
       for statement in newStatements:
-          if wantGrants or not isinstance(statement, cx_SQL.GrantStatement):
-              statement.Write(sys.stdout)
+          if wantGrants or not isinstance(statement, grantStatementClass):
+              sys.stdout.write(statement.sql)
+              sys.stdout.write("\n\n")
 
     # otherwise, perform comparisons and output applicable code to make changes
     else:
 
         # compare main object
-        if newStatements[0].SQL() != oldStatements[0].SQL():
+        if newStatements[0].sql != oldStatements[0].sql:
           describer.SetOwner(objOwner, objType)
           print "-- modifying", outputType, outputName
           print
-          if objType not in cx_OracleObject.SOURCE_TYPES:
+          if objType not in SOURCE_TYPES:
               OutputDropStatement(oldStatements, objsToDrop, objOwner,
                       objName, objType, False)
           newStatements[0].Write(sys.stdout)
