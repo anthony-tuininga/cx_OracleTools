@@ -47,9 +47,6 @@ table = environment.ObjectByType(owner, name, objType)
 columnNames = [c[0] for c in table.columns]
 
 # produce the output
-print "whenever sqlerror exit failure"
-print "whenever oserror exit failure"
-print
 print "rename", name, "to bk;"
 print
 table.Export(sys.stdout, options.wantTablespace, options.wantStorage)
@@ -62,7 +59,7 @@ if options.withCopydata:
     print name
 else:
     selectClauses = ",\n  ".join(columnNames)
-    print "insert /*+ append */ into", name, "nologging"
+    print "insert into", name
     print "select\n  %s\nfrom bk;" %  selectClauses
     print
     print "commit;"
