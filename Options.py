@@ -48,6 +48,10 @@ INCLUDE_USERS = cx_OptionParser.Option("--include-users", default = False,
         action = "store_true", dest = "includeUsers",
         help = "include create user statements")
 
+INCLUDE_VIEW_COLUMNS = cx_OptionParser.Option("--include-view-columns",
+        default = False, action = "store_true", dest = "wantViewColumns",
+        help = "include column names when describing views")
+
 MAX_LONG_SIZE = cx_OptionParser.Option("--max-long-size", metavar = "N",
         type = "int", default = 128 * 1024,
         help = "max long size is <n> bytes")
