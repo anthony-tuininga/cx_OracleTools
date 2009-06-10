@@ -10,7 +10,7 @@ import sys
 import Options
 
 # parse command line
-parser = cx_OptionParser.OptionParser("ImportData")
+parser = cx_OptionParser.OptionParser()
 parser.AddOption(cx_OracleUtils.SchemaOption())
 parser.AddOption(Options.ARRAY_SIZE)
 parser.AddOption(Options.COMMIT_POINT)

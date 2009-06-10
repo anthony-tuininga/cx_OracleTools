@@ -5,7 +5,7 @@ import cx_OptionParser
 import cx_OracleUtils
 
 # parse command line
-parser = cx_OptionParser.OptionParser("RecompileSource")
+parser = cx_OptionParser.OptionParser()
 parser.AddOption(cx_OracleUtils.SchemaOption())
 parser.AddOption("--on-error-continue", action = "store_false",
         dest = "raiseError", default = True,

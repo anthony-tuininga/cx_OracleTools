@@ -6,7 +6,7 @@ import cx_OracleUtils
 import cx_PatchCommands
 
 # parse command line
-parser = cx_OptionParser.OptionParser("PatchDB")
+parser = cx_OptionParser.OptionParser()
 parser.AddOption(cx_OracleUtils.SchemaOption())
 parser.AddOption("--on-error-continue", action = "store_true",
         help = "when an error occurs, continue processing")

@@ -11,7 +11,7 @@ import os
 import Options
 
 # parse command line
-parser = cx_OptionParser.OptionParser("CopyData")
+parser = cx_OptionParser.OptionParser()
 parser.AddOption(cx_OracleUtils.SchemaOption("source-schema"))
 parser.AddOption(cx_OracleUtils.SchemaOption("dest-schema"))
 parser.AddOption("--key-columns", metavar = "COLS",

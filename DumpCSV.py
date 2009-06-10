@@ -6,7 +6,7 @@ import cx_OracleUtils
 import sys
 
 # parse command line
-parser = cx_OptionParser.OptionParser("DumpCSV")
+parser = cx_OptionParser.OptionParser()
 parser.AddOption("--record-sep", default = "\n", metavar = "CHAR",
         help = "record separator to use")
 parser.AddOption("--field-sep", default = ",", metavar = "CHAR",

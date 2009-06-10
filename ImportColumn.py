@@ -9,7 +9,7 @@ import sys
 import Options
 
 # parse command line
-parser = cx_OptionParser.OptionParser("ImportColumn")
+parser = cx_OptionParser.OptionParser()
 parser.AddOption(cx_OracleUtils.SchemaOption())
 parser.AddOption(Options.BINARY)
 parser.AddOption(Options.STATEMENT_IN_FILE)

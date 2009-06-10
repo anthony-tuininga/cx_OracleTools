@@ -11,7 +11,7 @@ import xml.etree.cElementTree
 import Options
 
 # parse command line
-parser = cx_OptionParser.OptionParser("ImportXML")
+parser = cx_OptionParser.OptionParser()
 parser.AddOption(cx_OracleUtils.SchemaOption())
 parser.AddOption(Options.ARRAY_SIZE)
 parser.AddOption(Options.COMMIT_POINT)
