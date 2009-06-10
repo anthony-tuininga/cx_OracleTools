@@ -8,7 +8,7 @@ import cx_OracleUtils
 import sys
 
 # parse command line
-parser = cx_OptionParser.OptionParser("GenerateView")
+parser = cx_OptionParser.OptionParser()
 parser.AddOption(cx_OracleUtils.SchemaOption())
 parser.AddOption("--add-prefix", metavar = "STR",
         help = "add prefix to name of table to create view")

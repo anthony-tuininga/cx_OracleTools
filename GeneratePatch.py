@@ -15,7 +15,7 @@ import sys
 import Options
 
 # parse command line
-parser = cx_OptionParser.OptionParser("GeneratePatch")
+parser = cx_OptionParser.OptionParser()
 parser.AddOption(cx_OracleUtils.SchemaOption())
 parser.AddOption(Options.NO_COMMENTS)
 parser.AddOption(Options.NO_GRANTS)

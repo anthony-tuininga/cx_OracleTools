@@ -7,7 +7,7 @@ import cx_OracleUtils
 import datetime
 
 # parse command line
-parser = cx_OptionParser.OptionParser("DumpData")
+parser = cx_OptionParser.OptionParser()
 parser.AddOption(cx_OracleUtils.SchemaOption())
 parser.AddOption("--sort-by", metavar = "STR",
         help = "append an order by clause with this value to the query")

@@ -7,7 +7,7 @@ import cx_OracleDebugger
 import cx_OracleUtils
 
 # parse command line
-parser = cx_OptionParser.OptionParser("DbDebugger")
+parser = cx_OptionParser.OptionParser()
 parser.AddOption("--pipe-name", default = "DbDebugger",
         metavar = "NAME", prompt = "Pipe name",
         help = "use this pipe name for communication with the database")
