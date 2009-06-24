@@ -76,6 +76,10 @@ NO_GRANTS = cx_OptionParser.Option("--no-grants", default = True,
         action = "store_false", dest = "wantGrants",
         help = "exclude grants made on objects")
 
+NO_QUOTAS = cx_OptionParser.Option("--no-quotas", default = True,
+        action = "store_false", dest = "wantQuotas",
+        help = "exclude quotas on tablespaces")
+
 NO_RELATED = cx_OptionParser.Option("--no-related", default = True,
         action = "store_false", dest = "wantRelated",
         help = "exclude related objects")
