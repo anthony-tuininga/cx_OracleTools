@@ -8,6 +8,7 @@ import cx_OptionParser
 import cx_OracleUtils
 import os
 
+import Exceptions
 import Options
 
 # parse command line
@@ -72,19 +73,18 @@ elif " " not in sourceSQL:
         destinationTable = sourceSQL
     sourceInfo = cx_OracleUtils.GetObjectInfo(sourceConnection, sourceSQL)
     if sourceInfo is None:
-        raise "Source table %s not found." % sourceSQL
+        raise Exceptions.SourceTableNotFound(tableName = sourceSQL)
     sourceTableOwner, sourceTableName, sourceTableType = sourceInfo
     sourceSQL = "select * from %s.%s" % \
             (cx_OracleUtils.IdentifierRepr(sourceTableOwner),
              cx_OracleUtils.IdentifierRepr(sourceTableName))
 if not destinationTable:
-    raise "A destination table must be specified when a source query " \
-          "is used."
+    raise Exceptions.DestinationTableNotSpecified()
 
 # verify the destination table exists
 destInfo = cx_OracleUtils.GetObjectInfo(destConnection, destinationTable)
 if destInfo is None:
-    raise "Destination table %s not found." % destinationTable
+    raise Exceptions.TargetTableNotFound(tableName = destinationTable)
 destTableOwner, destTableName, destTableType = destInfo
 
 # determine columns in source query
@@ -129,7 +129,7 @@ if options.checkExists:
                 name = destTableName)
         row = cursor.fetchone()
         if not row:
-            raise "No primary or unique constraint found on table"
+            raise Exceptions.NoPrimaryOrUniqueConstraintOnTable()
         constraintName, = row
         cursor.execute("""
                 select column_name
@@ -141,13 +141,13 @@ if options.checkExists:
         keyColumns = [n for n, in cursor]
     for name in keyColumns:
         if name not in sourceColumns:
-            raise "Key column %s not in source query" % name
+            raise Exceptions.KeyColumnNotInSourceQuery(name = name)
 
 # match the columns; all of the source or all of the destination columns must
 # match for a valid copy
 matchingColumns = [n for n in sourceColumns if n in destColumns]
 if len(matchingColumns) not in (len(sourceColumns), len(destColumns)):
-    raise "All source columns or all destination columns must match by name"
+    raise Exceptions.NotAllColumnsMatchByName()
 
 # set up insert cursor
 insertNames = [cx_OracleUtils.IdentifierRepr(n) for n in matchingColumns]
