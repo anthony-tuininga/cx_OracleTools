@@ -15,3 +15,11 @@ class InvalidTableName(cx_Exceptions.BaseException):
 class ObjectNotATable(cx_Exceptions.BaseException):
     message = "Object %(name)s is not a table."
 
+
+class SourceDirectoryNotFound(cx_Exceptions.BaseException):
+    message = "Source (from directory) not found."
+
+
+class TargetDirectoryNotFound(cx_Exceptions.BaseException):
+    message = "Target (to directory) not found."
+

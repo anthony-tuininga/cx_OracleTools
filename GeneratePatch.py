@@ -12,6 +12,7 @@ import cx_Utils
 import os
 import sys
 
+import Exceptions
 import Options
 
 # parse command line
@@ -31,10 +32,10 @@ options = parser.Parse()
 cx_LoggingOptions.ProcessOptions(options)
 options.fromDir = os.path.normpath(options.fromDir)
 if not os.path.exists(options.fromDir):
-    raise "Source (from directory) not found."
+    raise Exceptions.SourceDirectoryNotFound()
 options.toDir = os.path.normpath(options.toDir)
 if not os.path.exists(options.toDir):
-    raise "Target (to directory) not found."
+    raise Exceptions.TargetDirectoryNotFound()
 
 # set up describe environment
 connection = cx_OracleUtils.Connect(options.schema)
