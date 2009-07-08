@@ -7,6 +7,8 @@ import cx_OracleObject
 import cx_OracleUtils
 import sys
 
+import Exceptions
+
 # parse command line
 parser = cx_OptionParser.OptionParser()
 parser.AddOption(cx_OracleUtils.SchemaOption())
@@ -40,7 +42,7 @@ else:
         excludeTables = [s.upper() for v in options.excludeTables
                 for s in v.split(",")]
     cursor.execute("select table_name from user_tables order by table_name")
-    tables = [n for n, in cursor.fetchall() if n not in excludeTables]
+    tables = [n for n, in cursor if n not in excludeTables]
 
 # prepare the cursor for retrieving the columns for the table
 cursor.prepare("""
@@ -53,12 +55,11 @@ cursor.setinputsizes(p_TableName = cx_Oracle.STRING)
 # output the view syntax for each table
 for tableName in tables:
     print >> sys.stderr, "Generating view for table", tableName + "..."
-    fromClause = "from %s;" % cx_OracleObject.NameForOutput(tableName)
+    fromClause = "from %s;" % tableName.lower()
     cursor.execute(None, p_TableName = tableName)
-    columnNames = ["  " + cx_OracleObject.NameForOutput(n) \
-            for n, in cursor.fetchall()]
+    columnNames = ["  " + n.lower() for n, in cursor]
     if not columnNames:
-        raise "Invalid table name."
+        raise Exceptions.InvalidTableName()
     if options.removePrefix \
             and tableName.startswith(options.removePrefix.upper()):
         tableName = tableName[len(options.removePrefix):]
