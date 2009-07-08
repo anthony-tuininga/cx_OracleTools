@@ -1,12 +1,12 @@
 """Generate a script for rebuilding a table."""
 
-import cx_Exceptions
 import cx_LoggingOptions
 import cx_OptionParser
 import cx_OracleObject
 import cx_OracleUtils
 import sys
 
+import Exceptions
 import Options
 
 # parse command line
@@ -34,13 +34,10 @@ connection = cx_OracleUtils.Connect(options.schema)
 environment = cx_OracleObject.Environment(connection, options)
 describer = cx_OracleObject.Describer(environment, options)
 
-class ObjectNotATable(cx_Exceptions.BaseException):
-    message = "Object %(name)s is not a table."
-
 # determine the type of object
 owner, name, objType = environment.ObjectInfo(options.tableName)
 if objType != "TABLE":
-    raise ObjectNotATable(name = options.tableName)
+    raise Exceptions.ObjectNotATable(name = options.tableName)
 
 # perform the describe
 table = environment.ObjectByType(owner, name, objType)

@@ -6,6 +6,7 @@ import cx_OracleUtils
 import cx_Oracle
 import sys
 
+import Exceptions
 import Options
 
 # parse command line
@@ -47,7 +48,7 @@ if not options.isColumn:
 else:
     parts = options.statement.upper().split(".")
     if len(parts) < 2 or len(parts) > 3:
-        raise "Column name must be of the form [Owner.]Table.Column"
+        raise Exceptions.InvalidColumnName()
     if len(parts) == 2:
         owner = connection.username.upper()
         table, column = parts
@@ -60,11 +61,7 @@ else:
     statement = "select %s from %s.%s%s" % (column, owner, table, whereClause)
 
 # execute the statement and retrieve the data
-cursor.execute(statement, **options.values)
-row = cursor.fetchone()
-if row is None:
-    raise "Row not found."
-clob, = row
-file(options.fileName, mode).write(clob.read())
+lob, = cursor.executeandfetchone(statement, **options.values)
+file(options.fileName, mode).write(lob.read())
 print >> sys.stderr, "Column successfully exported."
 

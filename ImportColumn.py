@@ -6,6 +6,7 @@ import cx_OracleUtils
 import cx_Oracle
 import sys
 
+import Exceptions
 import Options
 
 # parse command line
@@ -54,7 +55,7 @@ if not options.isColumn:
 else:
     parts = options.statement.upper().split(".")
     if len(parts) < 2 or len(parts) > 3:
-        raise "Column name must be of the form [Owner.]Table.Column"
+        raise Exceptions.InvalidColumnName()
     if len(parts) == 2:
         owner = connection.username.upper()
         table, column = parts
