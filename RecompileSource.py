@@ -14,6 +14,9 @@ parser.AddOption("--connect-as-owner", action = "store_true", default = False,
         help = "connect as the owner of the invalid object")
 parser.AddOption("--include", metavar = "LIST", action = "append",
         help = "list of schemas to recompile instead of the entire database")
+parser.AddOption("--include-file", metavar = "FILE",
+        help = "recompile objects found in schemas with the given names "
+               "found in the specified file")
 parser.AddOption("--exclude", metavar = "LIST", action = "append",
         help = "list of schemas to exclude from recompile")
 cx_LoggingOptions.AddOptions(parser)
@@ -26,6 +29,8 @@ connection = cx_OracleUtils.Connect(options.schema)
 # massage the list of schemas to include
 if options.include:
     includeSchemas = [s.upper() for v in options.include for s in v.split(",")]
+elif options.includeFile:
+    includeSchemas = [s.strip() for s in open(options.includeFile)]
 else:
     cursor = connection.cursor()
     cursor.arraysize = 25
