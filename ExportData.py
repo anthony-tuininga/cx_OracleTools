@@ -1,5 +1,7 @@
-"""Export data from a set of tables in a format suitable for importing to any
-Oracle database on any platform."""
+"""
+Export data from a set of tables in a format suitable for importing to any
+Oracle database on any platform.
+"""
 
 import cx_ExportData
 import cx_LoggingOptions

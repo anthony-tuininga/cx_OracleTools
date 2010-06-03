@@ -1,4 +1,6 @@
-"""Dump data as SQL statements given a SQL query to execute."""
+"""
+Dump data as SQL statements given a SQL query to execute.
+"""
 
 import cx_LoggingOptions
 import cx_OptionParser

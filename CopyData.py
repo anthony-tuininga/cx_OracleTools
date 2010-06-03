@@ -1,6 +1,8 @@
-"""Copy data from the source to the destination, performing inserts and updates
+"""
+Copy data from the source to the destination, performing inserts and updates
 as necessary to make the destination match the source. Note that deletes are
-not performed, however."""
+not performed, however.
+"""
 
 import cx_Logging
 import cx_LoggingOptions

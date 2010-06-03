@@ -1,5 +1,7 @@
-"""Export all of the objects in a schema as a set of directories named after
-the type of object containing a set of files named after the object itself."""
+"""
+Export all of the objects in a schema as a set of directories named after
+the type of object containing a set of files named after the object itself.
+"""
 
 import cx_LoggingOptions
 import cx_OptionParser

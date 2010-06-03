@@ -1,4 +1,6 @@
-"""Generate views based on tables in a database."""
+"""
+Generate views based on tables in a database.
+"""
 
 import cx_LoggingOptions
 import cx_OptionParser

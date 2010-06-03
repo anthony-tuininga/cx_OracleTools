@@ -1,5 +1,7 @@
-"""Generate a script which can be used to recreate all of the objects in an
-Oracle schema in the order necessary to avoid errors."""
+"""
+Generate a script which can be used to recreate all of the objects in an
+Oracle schema in the order necessary to avoid errors.
+"""
 
 import cx_LoggingOptions
 import cx_OptionParser

@@ -1,4 +1,6 @@
-"""Dump the results of a SQL select statement to a file in CSV format."""
+"""
+Dump the results of a SQL select statement to a file in CSV format.
+"""
 
 import cx_LoggingOptions
 import cx_OptionParser

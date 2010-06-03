@@ -1,4 +1,6 @@
-"""Performs commands to modify the contents of a database using scripts."""
+"""
+Performs commands to modify the contents of a database using scripts.
+"""
 
 import cx_LoggingOptions
 import cx_OptionParser

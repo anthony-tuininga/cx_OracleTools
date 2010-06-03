@@ -1,4 +1,6 @@
-"""Import data from a file into a CLOB or BLOB column in a database table."""
+"""
+Import data from a file into a CLOB or BLOB column in a database table.
+"""
 
 import cx_LoggingOptions
 import cx_OptionParser

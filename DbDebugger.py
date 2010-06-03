@@ -1,4 +1,6 @@
-"""Display output from a different Oracle process."""
+"""
+Display output from a different Oracle process.
+"""
 
 import cx_Logging
 import cx_LoggingOptions
