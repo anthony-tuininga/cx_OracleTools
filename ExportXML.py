@@ -1,4 +1,6 @@
-"""Export data from a table in an Oracle database to an XML file."""
+"""
+Export data from a table in an Oracle database to an XML file.
+"""
 
 import cx_Logging
 import cx_LoggingOptions

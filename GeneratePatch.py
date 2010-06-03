@@ -1,7 +1,9 @@
-"""Generates a patch for differences in objects in two directories (which may
+"""
+Generates a patch for differences in objects in two directories (which may
 have been created with ExportObjects) and ensures that the patch script can
 be executed without fear of encountering errors because of dependencies between
-objects."""
+objects.
+"""
 
 import cx_LoggingOptions
 import cx_OptionParser

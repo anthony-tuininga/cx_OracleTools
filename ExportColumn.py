@@ -1,4 +1,6 @@
-"""Export data from a CLOB or BLOB column in a database table to a file."""
+"""
+Export data from a CLOB or BLOB column in a database table to a file.
+"""
 
 import cx_LoggingOptions
 import cx_OptionParser

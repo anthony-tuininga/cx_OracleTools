@@ -1,4 +1,6 @@
-"""Import data from an XML file into a table in an Oracle database."""
+"""
+Import data from an XML file into a table in an Oracle database.
+"""
 
 import cx_Logging
 import cx_LoggingOptions

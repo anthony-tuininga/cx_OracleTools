@@ -1,4 +1,6 @@
-"""Import data from an export file into tables in an Oracle database."""
+"""
+Import data from an export file into tables in an Oracle database.
+"""
 
 import cx_ImportData
 import cx_Logging

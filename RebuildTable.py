@@ -1,4 +1,6 @@
-"""Generate a script for rebuilding a table."""
+"""
+Generate a script for rebuilding a table.
+"""
 
 import cx_LoggingOptions
 import cx_OptionParser

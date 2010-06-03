@@ -1,4 +1,6 @@
-"""Define common options used in describing objects."""
+"""
+Define common options used in describing objects.
+"""
 
 import cx_OptionParser
 import os

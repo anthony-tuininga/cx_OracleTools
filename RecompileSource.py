@@ -1,4 +1,6 @@
-"""Recompile all of the invalid source objects in an Oracle database."""
+"""
+Recompile all of the invalid source objects in an Oracle database.
+"""
 
 import cx_LoggingOptions
 import cx_OptionParser
