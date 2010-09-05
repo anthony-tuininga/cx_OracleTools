@@ -1,3 +1,45 @@
+Changes from 7.4 to 8.0
+ 1) In DescribeObject, added option --show-synonyms which enables display of
+    synonyms that reference the object. The default value for this option is
+    false.
+ 2) In DescribeObject, DescribeSchema, ExportObjects and RebuildTable, added
+    support for Oracle context objects.
+ 3) In DescribeSchema, ExportObjects and RecompileSource, added option
+    --name-file which acts in the same fashion as the --name option except that
+    the value of the option refers to a file containing a list of names, one
+    name per line.
+ 4) In DescribeObject, DescribeSchema and ExportObjects, added option
+    --include-view-columns which enables specification of the column names
+    when creating a view.
+ 5) In DescribeObject and DescribeSchema added support for eliminating the
+    quotas on tablespaces when generating create user statements.
+ 6) In DescribeObject, DescribeSchema and ExportObjects, added options
+    --as-of-timestamp and --as-of-scn which enable flashback queries when
+    performing describes. This can be very useful for recovering those
+    accidentally issued DDL commands!
+ 7) In DumpData, added support for dumping CLOB, BLOB and binary data values
+    correctly. A commit statement is also appended to the output now as a
+    convenience.
+ 8) In ExportXML, added option --sort-by which allows the result set to be
+    sorted before exporting. In addition, the source can be a query instead of
+    simply a table name.
+ 9) In GeneratePatch, switch to the new more intelligent parser.
+10) In ImportXML, now use cElementTree rather than home-grown XML processing
+    library.
+11) In RebuildTable, removed SQL*Plus specific statements since by default
+    connect statements are issued which only works properly with PatchDB.
+12) In RecompileSource, added option --connect-as-owner and removed option
+    --password. The new option specifies that when invalid objects are
+    recompiled that a connection to the owner of the invalid object is
+    established using the password of the current connection. The default
+    value is false since this is an uncommon situation and is retained at all
+    for support of product development at Computronix.
+13) Replaced CompileSource with PatchDB which uses a much more advanced parser
+    and is setup to handle additional commands besides executing SQL scripts.
+14) Added setup.py for building with cx_Freeze.
+15) Other changes required to keep up with changes in Python, dependent
+    libraries and Oracle (including up to Oracle 11.2).
+
 Changes from 7.3 to 7.4
  1) Use cx_Logging to output messages rather than write directly to stderr.
  2) Added support for describing comments on tables and columns.
