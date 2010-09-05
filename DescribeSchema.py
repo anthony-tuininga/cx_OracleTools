@@ -32,6 +32,8 @@ parser.AddOption(Options.INCLUDE_ROLES)
 parser.AddOption(Options.INCLUDE_USERS)
 parser.AddOption(Options.INCLUDE_CONTEXTS)
 parser.AddOption(Options.MAX_LONG_SIZE)
+parser.AddOption(Options.AS_OF_SCN)
+parser.AddOption(Options.AS_OF_TIMESTAMP)
 cx_LoggingOptions.AddOptions(parser)
 parser.AddArgument("fileName",
         help = "the name of the file to populate with the statements or '-'"

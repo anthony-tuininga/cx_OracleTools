@@ -33,6 +33,8 @@ parser.AddOption(Options.NAMES_FILE)
 parser.AddOption(Options.ONLY_TYPES)
 parser.AddOption(Options.ONLY_IF)
 parser.AddOption(Options.MAX_LONG_SIZE)
+parser.AddOption(Options.AS_OF_SCN)
+parser.AddOption(Options.AS_OF_TIMESTAMP)
 parser.AddOption("--base-dir", default = ".", metavar = "DIR",
         help = "base directory in which to place exported objects")
 parser.AddOption("--suppress-owner-dir",

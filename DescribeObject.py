@@ -27,6 +27,8 @@ parser.AddOption(Options.INCLUDE_SEQUENCE_VALUES)
 parser.AddOption(Options.INCLUDE_VIEW_COLUMNS)
 parser.AddOption(Options.USE_DBA_VIEWS)
 parser.AddOption(Options.MAX_LONG_SIZE)
+parser.AddOption(Options.AS_OF_SCN)
+parser.AddOption(Options.AS_OF_TIMESTAMP)
 cx_LoggingOptions.AddOptions(parser)
 parser.AddArgument("objectName", required = True,
         help = "the name of the object to describe")
