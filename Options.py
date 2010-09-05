@@ -8,6 +8,12 @@ import os
 ARRAY_SIZE = cx_OptionParser.Option("--array-size", type = "int",
         metavar = "N", help = "array size is <n> rows")
 
+AS_OF_SCN = cx_OptionParser.Option("--as-of-scn", type="int", metavar = "SCN",
+        help = "system change number to use for performing a flashback query")
+
+AS_OF_TIMESTAMP = cx_OptionParser.Option("--as-of-timestamp", metavar = "TS",
+        help = "timestamp expression to use for performing a flashback query")
+
 BINARY = cx_OptionParser.Option("--binary", action = "store_true",
         help = "the column is a BLOB (or long raw), not a CLOB (or long)")
 
