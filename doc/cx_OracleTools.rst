@@ -89,6 +89,7 @@ The following options are common to all of the tools:
 | --version           | display the version information and stop              |
 +---------------------+-------------------------------------------------------+
 
+
 --------
 CopyData
 --------
@@ -122,7 +123,7 @@ Arguments
 |                     | examples of valid source:                             |
 |                     | - sourcetbl                                           |
 |                     | - common.sourcetbl                                    |
-|                     | - “select col1,col2 from common.sourcetbl”            |
+|                     | - select col1,col2 from common.sourcetbl              |
 +---------------------+-------------------------------------------------------+
 | DESTINATION         | Name of the table or view into which the data will be |
 |                     | copied.  If source is not a SQL statement, this may   |
@@ -211,6 +212,7 @@ Options
 | --log-prefix=       | see `Common Options`_                                 |
 +---------------------+-------------------------------------------------------+
 
+
 ----------
 DbDebugger
 ----------
@@ -252,6 +254,107 @@ Options
 |                     | environment variable ORA_USERID.  Note: If this (or   |
 |                     | ORA_USERID) does not contain the password, it will be |
 |                     | prompted for.                                         |
++---------------------+-------------------------------------------------------+
+| --log-file=         | see `Common Options`_                                 |
++---------------------+-------------------------------------------------------+
+| --log-level=        | see `Common Options`_                                 |
++---------------------+-------------------------------------------------------+
+| --log-prefix=       | see `Common Options`_                                 |
++---------------------+-------------------------------------------------------+
+
+
+--------------
+DescribeObject
+--------------
+
+This utility is used to show the DDL necessary to recreate an object in the
+database.
+
+Usage
+=====
+
+DescribeObject [options] OBJECTNAME [FILENAME]
+
+When you run DescribeObject it will describe the specific object with the
+specified options.
+
+Arguments
+=========
+
++---------------------+-------------------------------------------------------+
+| Name                | Description                                           |
++---------------------+-------------------------------------------------------+
+| OBJECTNAME          | Name of the object to be described.  This may be      |
+|                     | qualified by a schema; however, unless DBA views are  |
+|                     | used the description may not be complete.             |
++---------------------+-------------------------------------------------------+
+| FILENAME            | Name of the file to put the description of the object |
+|                     | into.  If omitted or specified as '-', then the output|
+|                     | will be shown on the screen (stdout).                 |
++---------------------+-------------------------------------------------------+
+
+Options
+=======
+
++---------------------+-------------------------------------------------------+
+| Name                | Description                                           |
++---------------------+-------------------------------------------------------+
+| -t, --traceback     | see `Common Options`_                                 |
++---------------------+-------------------------------------------------------+
+| --show-banner       | see `Common Options`_                                 |
++---------------------+-------------------------------------------------------+
+| --version           | see `Common Options`_                                 |
++---------------------+-------------------------------------------------------+
+| -h, --help          | see `Common Options`_                                 |
++---------------------+-------------------------------------------------------+
+| --schema            | Use this to connect to the database and not the       |
+|                     | environment variable ORA_USERID.  Note: If this (or   |
+|                     | ORA_USERID) does not contain the password, it will be |
+|                     | prompted for.                                         |
++---------------------+-------------------------------------------------------+
+| --no-comments       | Do not include object comments in the description.    |
++---------------------+-------------------------------------------------------+
+| --no-grants         | Do not include the grants in the description.         |
++---------------------+-------------------------------------------------------+
+| --no-related        | Do not include related objects in the description     |
+|                     | (e.g. the body of a package, the indexes and          |
+|                     | constraints for a table, etc.).                       |
++---------------------+-------------------------------------------------------+
+| --no-triggers       | Do not include related triggers in the description.   |
++---------------------+-------------------------------------------------------+
+| --dont-merge-grants | Show each grant as a separate statement.  In the case |
+|                     | where multiple privileges are granted to the same     |
+|                     | user/role, each one will be a separate statement.     |
++---------------------+-------------------------------------------------------+
+| --default-tablespace| Do not include tablespace specifications.             |
++---------------------+-------------------------------------------------------+
+| --default-storage   | Do not include storage specifications.                |
++---------------------+-------------------------------------------------------+
+| --show-foreign-keys | Include all accessible foreign keys that reference the|
+|                     | object being described.                               |
++---------------------+-------------------------------------------------------+
+| --show-synonyms     | Include synonyms referencing the object.              |
++---------------------+-------------------------------------------------------+
+| --include-sequence-\| When describing a sequence include its current value. |
+| values              |                                                       |
++---------------------+-------------------------------------------------------+
+| --include-view-\    | Include column names when describing views.           |
+| columns             |                                                       |
++---------------------+-------------------------------------------------------+
+| --use-dba-views     | Use dba_xxx views for retrieving the information      |
+|                     | about the object.  If the connecting user does not    |
+|                     | have security to see them, an error will result.      |
++---------------------+-------------------------------------------------------+
+| --max-long-size=N   | Specify the maximum length of a view or trigger. This |
+|                     | This defaults to 128K.                                |
++---------------------+-------------------------------------------------------+
+| --as-of-scn=SCN     | All queries performed to retrieve information about   |
+|                     | the object will use a flashback query to the specified|
+|                     | system change number.                                 |
++---------------------+-------------------------------------------------------+
+| --as-of-timestamp=TS| All queries performed to retrieve information about   |
+|                     | the object will use a flashback query to the specified|
+|                     | timestamp expression.                                 |
 +---------------------+-------------------------------------------------------+
 | --log-file=         | see `Common Options`_                                 |
 +---------------------+-------------------------------------------------------+
