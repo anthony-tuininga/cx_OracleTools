@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.6: http://docutils.sourceforge.net/" />
+<title>cx_OracleTools</title>
+<style type="text/css">
+
+/*
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 5951 2009-05-18 18:03:10Z milde $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin: 0 0 0.5em 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left, .figure.align-left{
+  clear: left ;
+  float: left ;
+  margin-right: 1em }
+
+img.align-right, .figure.align-right {
+  clear: right ;
+  float: right ;
+  margin-left: 1em }
+
+.align-left {
+  text-align: left }
+
+.align-center {
+  clear: both ;
+  text-align: center }
+
+.align-right {
+  text-align: right }
+
+/* reset inner alignment in figures */
+div.align-right {
+  text-align: left }
+
+/* div.align-center * { */
+/*   text-align: left } */
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font: inherit }
+
+pre.literal-block, pre.doctest-block {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+</head>
+<body>
+<div class="document" id="cx-oracletools">
+<h1 class="title">cx_OracleTools</h1>
+
+<p>This document covers a cross platform set of tools for working with Oracle
+databases. These tools have been developed over the past number of years and
+are designed to provide easier access to information or capabilities than that
+provided by default with Oracle.</p>
+<p><strong>NOTE:</strong> These tools are a work in progress and are geared for people who are
+reasonably comfortable with Oracle.  This means that while an attempt will be
+made to maintain a stable interface for these tools, changes or extensions will
+be made if there is a valid reason for it.</p>
+<p><strong>NOTE:</strong> Please see HISTORY.txt for a list of changes.</p>
+<div class="section" id="overview">
+<h1>Overview</h1>
+<div class="section" id="environments">
+<h2>Environments</h2>
+<p>These tools have been known to work in the following environments:</p>
+<dl class="docutils">
+<dt>Oracle Version:</dt>
+<dd><ul class="first last simple">
+<li>Oracle 9i Release 2</li>
+<li>Oracle 10g Release 1</li>
+<li>Oracle 10g Release 2</li>
+<li>Oracle 11g Release 1</li>
+<li>Oracle 11g Release 2</li>
+</ul>
+</dd>
+<dt>Operating Systems:</dt>
+<dd><ul class="first last simple">
+<li>Windows (32-bit and 64-bit)</li>
+<li>Linux (32-bit and 64-bit)</li>
+<li>SunOS 5.8</li>
+<li>HP-UX 11</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="conventions">
+<h2>Conventions</h2>
+<p>In the description of each tool, the following conventions are used for the
+arguments and options:</p>
+<blockquote>
+<ul>
+<li><p class="first">Items enclosed in brackets (&quot;[]&quot;) are optional.</p>
+</li>
+<li><p class="first">Mixed and lower case items are to be typed exactly as displayed.</p>
+</li>
+<li><p class="first">UPPERCASE items are to be replaced by the user desired value.</p>
+</li>
+<li><p class="first">If an option is shown with an equals sign (&quot;=&quot;), the equals sign may be
+replaced with a space</p>
+</li>
+<li><dl class="first docutils">
+<dt>Special option parameter values:</dt>
+<dd><ul class="first last simple">
+<li>N - a number must be entered if the option is specified.</li>
+<li>SCHEMA - Oracle connect string in the format of
+ORACLELOGONID[/PASSWORD]&#64;TNSENTRY[ AS SYSDBA|SYSOPER] If PASSWORD is
+omitted, it will be prompted for.</li>
+<li>ROLE - Oracle role in the format of: ROLENAME[/PASSWORD] If the role
+requires a password and one is not specified, then the attempt to
+enable the role will fail and the tool will stop.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+</div>
+<div class="section" id="common-options">
+<h2>Common Options</h2>
+<p>The following options are common to most of the tools:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>name</td>
+<td>description</td>
+</tr>
+<tr><td>-h, --help</td>
+<td>display a brief usage description of the arguments and
+options and stop</td>
+</tr>
+<tr><td>--log-file=</td>
+<td>the name of the file to log messages to or the words
+<tt class="docutils literal">stdout</tt> or <tt class="docutils literal">stderr</tt>; the default is <tt class="docutils literal">stderr</tt></td>
+</tr>
+<tr><td>--log-level=</td>
+<td>the level at which to log messages, one of debug (10),
+info (20), warning (30), error (40) or critical (50);
+the default is <tt class="docutils literal">error</tt></td>
+</tr>
+<tr><td>--log-prefix=</td>
+<td>the prefix to use for log messages which is a mask
+containing %i (id of the thread logging the message),
+%d (date at which the message was logged), %t (time at
+which the message was logged) or %l (level at which
+the message was logged); the default is <tt class="docutils literal">%t</tt></td>
+</tr>
+<tr><td>--show-banner</td>
+<td>display the program name and version</td>
+</tr>
+<tr><td>-t, --traceback</td>
+<td>when an error is encountered, display an internal
+traceback stack</td>
+</tr>
+<tr><td>--version</td>
+<td>display the version information and stop</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="copydata">
+<h1>CopyData</h1>
+<p>This utility is used to copy data between “tables.”  These tables may be in the
+same database or in different databases.  Also, the source table may be an SQL
+query.</p>
+<div class="section" id="usage">
+<h2>Usage</h2>
+<p>CopyData [options] SOURCE [DESTINATION]</p>
+<p>When you run CopyData, it connects to the source and destination databases and
+optionally activates the specified non-default role specified.  It then
+proceeds to read from the source and write to the destination.  This is done in
+a bulk array format which is extremely efficient.  By default, it checks to see
+if the row about to be written to the destination already exists and if so, if
+it matches.  This means that you are able to insert new rows and only update
+changed rows.</p>
+</div>
+<div class="section" id="arguments">
+<h2>Arguments</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>SOURCE</td>
+<td>Name of the table from which the data will be copied.
+This may be qualified with a schema.  Also, this may
+be specified as a SQL statement. The following are
+examples of valid source:
+- sourcetbl
+- common.sourcetbl
+- “select col1,col2 from common.sourcetbl”</td>
+</tr>
+<tr><td>DESTINATION</td>
+<td>Name of the table or view into which the data will be
+copied.  If source is not a SQL statement, this may
+be omitted, in which case, the source table name will
+be used.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="options">
+<h2>Options</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>-t, --traceback</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--show-banner</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--version</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>-h, --help</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--source-schema=SCHEMA</td>
+<td>Use this to connect to the database and not the
+environment variable ORA_USERID for the source. NOTE:
+If this (or ORA_USERID) does not contain the password,
+it will be prompted for.</td>
+</tr>
+<tr><td>--dest-schema=SCHEMA</td>
+<td>Use this to connect to the database and not the
+environment variable ORA_USERID for the destination.
+NOTE: If this (or ORA_USERID) does not contain the
+password, it will be prompted for.</td>
+</tr>
+<tr><td>--key-columns=COLS</td>
+<td>Comma separated list of the name of columns that are
+to be treated as the key.  These are used when
+checking if the row exists and/or has been modified.
+If a row in the destination table cannot be found
+when using the values from the source table for these
+columns it is assumed they do not exist. Similarly,
+if the row exists but other values differ, it is
+assumed to be modified. NOTE: if this option is not
+specified, an attempt is made to determine the
+primary key or unique constraint on the destination
+table.</td>
+</tr>
+<tr><td>--no-check-exists</td>
+<td>Do not check to see if the row exists in the
+destination; always insert the row from the source.</td>
+</tr>
+<tr><td>--no-check-modified</td>
+<td>Do not check to see if the row has been modified on
+the destination.  That is, always update the row on
+the destination if it exists.</td>
+</tr>
+<tr><td>--skip=N</td>
+<td>Number of rows from the source to skip before
+starting to copy.</td>
+</tr>
+<tr><td>--row-limit=N</td>
+<td>Number of rows to process.  This number includes the
+number of rows skipped, if any.</td>
+</tr>
+<tr><td>--commit-point=N</td>
+<td>Issue a commit every N rows processed.  If not
+specified, a commit will only be issued after the
+entire table is copied.</td>
+</tr>
+<tr><td>--report-point=N</td>
+<td>Display a message every n rows processed.  If not
+specified, no progress messages will be issued.</td>
+</tr>
+<tr><td>--array-size=N</td>
+<td>This is the number of rows that will be read from the
+database at one time.  It is recommended to set this
+to as large a value as possible without incurring
+paging.</td>
+</tr>
+<tr><td>--max-long-size=N</td>
+<td>Specify the maximum length of a long or long raw
+column. This defaults to 128K.</td>
+</tr>
+<tr><td>--source-role=ROLE</td>
+<td>Enable this role after connecting to the source
+database prior to executing any SQL on that database.
+May also be specified as role/password for password
+required roles.</td>
+</tr>
+<tr><td>--dest-role=ROLE</td>
+<td>Enable this role after connecting to the destination
+database prior to executing any SQL on that database.
+May also be specified as role/password for password
+required roles.</td>
+</tr>
+<tr><td>--log-file=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-level=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-prefix=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</body>
+</html>
