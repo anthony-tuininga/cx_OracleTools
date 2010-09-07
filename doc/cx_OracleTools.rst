@@ -60,7 +60,7 @@ arguments and options:
 Common Options
 ==============
 
-The following options are common to most of the tools:
+The following options are common to all of the tools:
 
 +---------------------+-------------------------------------------------------+
 | name                | description                                           |
@@ -203,6 +203,55 @@ Options
 |                     | database prior to executing any SQL on that database. |
 |                     | May also be specified as role/password for password   |
 |                     | required roles.                                       |
++---------------------+-------------------------------------------------------+
+| --log-file=         | see `Common Options`_                                 |
++---------------------+-------------------------------------------------------+
+| --log-level=        | see `Common Options`_                                 |
++---------------------+-------------------------------------------------------+
+| --log-prefix=       | see `Common Options`_                                 |
++---------------------+-------------------------------------------------------+
+
+----------
+DbDebugger
+----------
+
+This utility is used in conjunction with the pkg_Debug package to provide real
+time messaging from PL/SQL procedure to an outside process.
+
+Usage
+=====
+
+DbDebugger [options]
+
+When you run DbDebugger, it will wait for messages from pkg_Debug where the
+pipename specified matches.  You should not run more than one DbDebugger for a
+given pipename on a database as it is undefined which DbDebugger will get each
+line of output.
+
+Options
+=======
+
++---------------------+-------------------------------------------------------+
+| Name                | Description                                           |
++---------------------+-------------------------------------------------------+
+| -t, --traceback     | see `Common Options`_                                 |
++---------------------+-------------------------------------------------------+
+| --show-banner       | see `Common Options`_                                 |
++---------------------+-------------------------------------------------------+
+| -p, --prompt        | Prompts the user for the pipename and database        |
+|                     | connect string.                                       |
++---------------------+-------------------------------------------------------+
+| --version           | see `Common Options`_                                 |
++---------------------+-------------------------------------------------------+
+| -h, --help          | see `Common Options`_                                 |
++---------------------+-------------------------------------------------------+
+| --pipe-name=NAME    | Name of pipe to listen on.  If omitted, defaults to   |
+|                     | DbDebugger.  Note: NAME is not case sensitive.        |
++---------------------+-------------------------------------------------------+
+| --schema            | Use this to connect to the database and not the       |
+|                     | environment variable ORA_USERID.  Note: If this (or   |
+|                     | ORA_USERID) does not contain the password, it will be |
+|                     | prompted for.                                         |
 +---------------------+-------------------------------------------------------+
 | --log-file=         | see `Common Options`_                                 |
 +---------------------+-------------------------------------------------------+

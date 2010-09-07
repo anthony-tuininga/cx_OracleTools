@@ -375,7 +375,7 @@ enable the role will fail and the tool will stop.</li>
 </div>
 <div class="section" id="common-options">
 <h2>Common Options</h2>
-<p>The following options are common to most of the tools:</p>
+<p>The following options are common to all of the tools:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="28%" />
@@ -559,6 +559,68 @@ required roles.</td>
 database prior to executing any SQL on that database.
 May also be specified as role/password for password
 required roles.</td>
+</tr>
+<tr><td>--log-file=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-level=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-prefix=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="dbdebugger">
+<h1>DbDebugger</h1>
+<p>This utility is used in conjunction with the pkg_Debug package to provide real
+time messaging from PL/SQL procedure to an outside process.</p>
+<div class="section" id="id1">
+<h2>Usage</h2>
+<p>DbDebugger [options]</p>
+<p>When you run DbDebugger, it will wait for messages from pkg_Debug where the
+pipename specified matches.  You should not run more than one DbDebugger for a
+given pipename on a database as it is undefined which DbDebugger will get each
+line of output.</p>
+</div>
+<div class="section" id="id2">
+<h2>Options</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>-t, --traceback</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--show-banner</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>-p, --prompt</td>
+<td>Prompts the user for the pipename and database
+connect string.</td>
+</tr>
+<tr><td>--version</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>-h, --help</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--pipe-name=NAME</td>
+<td>Name of pipe to listen on.  If omitted, defaults to
+DbDebugger.  Note: NAME is not case sensitive.</td>
+</tr>
+<tr><td>--schema</td>
+<td>Use this to connect to the database and not the
+environment variable ORA_USERID.  Note: If this (or
+ORA_USERID) does not contain the password, it will be
+prompted for.</td>
 </tr>
 <tr><td>--log-file=</td>
 <td>see <a class="reference internal" href="#common-options">Common Options</a></td>
