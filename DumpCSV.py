@@ -2,13 +2,18 @@
 Dump the results of a SQL select statement to a file in CSV format.
 """
 
+import csv
+import cx_Logging
 import cx_LoggingOptions
 import cx_OptionParser
 import cx_OracleUtils
 import sys
 
+import Options
+
 # parse command line
 parser = cx_OptionParser.OptionParser()
+parser.AddOption(cx_OracleUtils.SchemaOption())
 parser.AddOption("--record-sep", default = "\n", metavar = "CHAR",
         help = "record separator to use")
 parser.AddOption("--field-sep", default = ",", metavar = "CHAR",
@@ -23,23 +28,24 @@ parser.AddOption("--sql-in-file", action = "store_true",
         help = "SQL parameter is actually a file name in which the SQL is "
                "found")
 cx_LoggingOptions.AddOptions(parser)
-parser.AddArgument("connectString", required = True,
-        help = "the string to use for connecting to the database")
 parser.AddArgument("sql", required = True,
         help = "the SQL to execute or the name of a file in which the SQL "
                "is found if the --sql-in-file option is used")
-parser.AddArgument("fileName", required = True,
+parser.AddArgument("fileName",
         help = "the name of the file in which to place the output")
 options = parser.Parse()
 cx_LoggingOptions.ProcessOptions(options)
 
 # connect to database
-connection = cx_OracleUtils.Connect(options.connectString)
+connection = cx_OracleUtils.Connect(options.schema)
 cursor = connection.cursor()
 cursor.arraysize = 50
 
 # open output file
-outFile = file(options.fileName, "w")
+if options.fileName is None or options.fileName == "-":
+    outFile = sys.stdout
+else:
+    outFile = file(options.fileName, "w")
 
 # determine SQL and execute it
 sql = options.sql
@@ -51,31 +57,22 @@ cursor.execute(sql)
 def EvalString(value):
     return value.replace("\\t", "\t").replace("\\n", "\n")
 
-# define function to return a string representation of each type
-def StringRep(value):
-    if value is None:
-        return ""
-    elif isinstance(value, str):
-        if not gStringEncloser:
-            return value
-        return gStringEncloser + value.replace(gStringEncloser, \
-                gEscapeCharacter + gStringEncloser) + gStringEncloser
-    return str(value)
-
 # dump the results to the output file
-gFieldSeparator = EvalString(options.fieldSep)
-gRecordSeparator = EvalString(options.recordSep)
-gStringEncloser = EvalString(options.stringEncloser)
-gEscapeCharacter = EvalString(options.escapeChar)
+fieldSeparator = EvalString(options.fieldSep)
+recordSeparator = EvalString(options.recordSep)
+stringEncloser = EvalString(options.stringEncloser)
+escapeCharacter = EvalString(options.escapeChar)
+writer = csv.writer(outFile, delimiter = fieldSeparator,
+        quotechar = stringEncloser, escapechar = escapeCharacter,
+        lineterminator = recordSeparator)
 for row in cursor:
-    outFile.write(gFieldSeparator.join([StringRep(v) for v in row]))
-    outFile.write(gRecordSeparator)
+    writer.writerow(row)
     if options.reportPoint and cursor.rowcount % options.reportPoint == 0:
-        print >> sys.stderr, " ", cursor.rowcount, "rows dumped."
+        cx_Logging.Trace("%s rows dumped.", cursor.rowcount)
 
 # report the total number of rows dumped
 if not options.reportPoint or cursor.rowcount == 0 or \
         cursor.rowcount % options.reportPoint != 0:
-    print >> sys.stderr, " ", cursor.rowcount, "rows dumped."
-print >> sys.stderr, "Done."
+    cx_Logging.Trace("%s rows dumped.", cursor.rowcount)
+cx_Logging.Trace("Done.")
 

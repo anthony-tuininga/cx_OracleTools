@@ -17,27 +17,30 @@ Changes from 7.4 to 8.0
     --as-of-timestamp and --as-of-scn which enable flashback queries when
     performing describes. This can be very useful for recovering those
     accidentally issued DDL commands!
- 7) In DumpData, added support for dumping CLOB, BLOB and binary data values
+ 7) In DumpCSV, make use of the builtin module csv and the standard option
+    --schema; in addition, allow the file name to be specified as "-" or not
+    at all in which case the output goes to stdout.
+ 8) In DumpData, added support for dumping CLOB, BLOB and binary data values
     correctly. A commit statement is also appended to the output now as a
     convenience.
- 8) In ExportXML, added option --sort-by which allows the result set to be
+ 9) In ExportXML, added option --sort-by which allows the result set to be
     sorted before exporting. In addition, the source can be a query instead of
     simply a table name.
- 9) In GeneratePatch, switch to the new more intelligent parser.
-10) In ImportXML, now use cElementTree rather than home-grown XML processing
+10) In GeneratePatch, switch to the new more intelligent parser.
+11) In ImportXML, now use cElementTree rather than home-grown XML processing
     library.
-11) In RebuildTable, removed SQL*Plus specific statements since by default
+12) In RebuildTable, removed SQL*Plus specific statements since by default
     connect statements are issued which only works properly with PatchDB.
-12) In RecompileSource, added option --connect-as-owner and removed option
+13) In RecompileSource, added option --connect-as-owner and removed option
     --password. The new option specifies that when invalid objects are
     recompiled that a connection to the owner of the invalid object is
     established using the password of the current connection. The default
     value is false since this is an uncommon situation and is retained at all
     for support of product development at Computronix.
-13) Replaced CompileSource with PatchDB which uses a much more advanced parser
+14) Replaced CompileSource with PatchDB which uses a much more advanced parser
     and is setup to handle additional commands besides executing SQL scripts.
-14) Added setup.py for building with cx_Freeze.
-15) Other changes required to keep up with changes in Python, dependent
+15) Added setup.py for building with cx_Freeze.
+16) Other changes required to keep up with changes in Python, dependent
     libraries and Oracle (including up to Oracle 11.2).
 
 Changes from 7.3 to 7.4
