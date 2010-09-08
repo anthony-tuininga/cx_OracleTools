@@ -2,3 +2,4 @@ include MANIFEST.in
 include *.py
 include *.txt
 recursive-include sql *.sql
+recursive-include doc *.rst *.html
