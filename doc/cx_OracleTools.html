@@ -453,7 +453,7 @@ be specified as a SQL statement. The following are
 examples of valid source:
 - sourcetbl
 - common.sourcetbl
-- “select col1,col2 from common.sourcetbl”</td>
+- select col1,col2 from common.sourcetbl</td>
 </tr>
 <tr><td>DESTINATION</td>
 <td>Name of the table or view into which the data will be
@@ -535,7 +535,7 @@ specified, a commit will only be issued after the
 entire table is copied.</td>
 </tr>
 <tr><td>--report-point=N</td>
-<td>Display a message every n rows processed.  If not
+<td>Display a message every N rows processed.  If not
 specified, no progress messages will be issued.</td>
 </tr>
 <tr><td>--array-size=N</td>
@@ -621,6 +621,1704 @@ DbDebugger.  Note: NAME is not case sensitive.</td>
 environment variable ORA_USERID.  Note: If this (or
 ORA_USERID) does not contain the password, it will be
 prompted for.</td>
+</tr>
+<tr><td>--log-file=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-level=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-prefix=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="describeobject">
+<h1>DescribeObject</h1>
+<p>This utility is used to show the DDL necessary to recreate an object in the
+database.</p>
+<div class="section" id="id3">
+<h2>Usage</h2>
+<p>DescribeObject [options] OBJECTNAME [FILENAME]</p>
+<p>When you run DescribeObject it will describe the specific object with the
+specified options.</p>
+</div>
+<div class="section" id="id4">
+<h2>Arguments</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>OBJECTNAME</td>
+<td>Name of the object to be described.  This may be
+qualified by a schema; however, unless DBA views are
+used the description may not be complete.</td>
+</tr>
+<tr><td>FILENAME</td>
+<td>Name of the file to put the description of the object
+into.  If omitted or specified as '-', then the output
+will be shown on the screen (stdout).</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id5">
+<h2>Options</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>-t, --traceback</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--show-banner</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--version</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>-h, --help</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--schema=SCHEMA</td>
+<td>Use this to connect to the database and not the
+environment variable ORA_USERID.  Note: If this (or
+ORA_USERID) does not contain the password, it will be
+prompted for.</td>
+</tr>
+<tr><td>--no-comments</td>
+<td>Do not include object comments in the description.</td>
+</tr>
+<tr><td>--no-grants</td>
+<td>Do not include the grants in the description.</td>
+</tr>
+<tr><td>--no-related</td>
+<td>Do not include related objects in the description
+(e.g. the body of a package, the indexes and
+constraints for a table, etc.).</td>
+</tr>
+<tr><td>--no-triggers</td>
+<td>Do not include related triggers in the description.</td>
+</tr>
+<tr><td>--dont-merge-grants</td>
+<td>Show each grant as a separate statement.  In the case
+where multiple privileges are granted to the same
+user/role, each one will be a separate statement.</td>
+</tr>
+<tr><td>--default-tablespace</td>
+<td>Do not include tablespace specifications.</td>
+</tr>
+<tr><td>--default-storage</td>
+<td>Do not include storage specifications.</td>
+</tr>
+<tr><td>--show-foreign-keys</td>
+<td>Include all accessible foreign keys that reference the
+object being described.</td>
+</tr>
+<tr><td>--show-synonyms</td>
+<td>Include synonyms referencing the object.</td>
+</tr>
+<tr><td>--include-sequence-values</td>
+<td>When describing a sequence include its current value.</td>
+</tr>
+<tr><td>--include-view-columns</td>
+<td>Include column names when describing views.</td>
+</tr>
+<tr><td>--use-dba-views</td>
+<td>Use dba_xxx views for retrieving the information
+about the object.  If the connecting user does not
+have security to see them, an error will result.</td>
+</tr>
+<tr><td>--max-long-size=N</td>
+<td>Specify the maximum length of a view or trigger. This
+defaults to 128K.</td>
+</tr>
+<tr><td>--as-of-scn=SCN</td>
+<td>All queries performed to retrieve information about
+the object will use a flashback query to the specified
+system change number.</td>
+</tr>
+<tr><td>--as-of-timestamp=TS</td>
+<td>All queries performed to retrieve information about
+the object will use a flashback query to the specified
+timestamp expression.</td>
+</tr>
+<tr><td>--log-file=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-level=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-prefix=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="describeschema">
+<h1>DescribeSchema</h1>
+<p>This utility is used to describe all objects within one or more schemas.</p>
+<div class="section" id="id6">
+<h2>Usage</h2>
+<p>DescribeSchema [options] [FILENAME]</p>
+<p>When you run DescribeSchema it will describe all the objects within the
+specified schema into the specified file.</p>
+</div>
+<div class="section" id="id7">
+<h2>Arguments</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>FILENAME</td>
+<td>Name of the file in which the output will be placed.
+If omitted or specified as '-', then the output will
+be shown on the screen (stdout).</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id8">
+<h2>Options</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>-t, --traceback</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--show-banner</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--version</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>-h, --help</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--schema=SCHEMA</td>
+<td>Use this to connect to the database and not the
+environment variable ORA_USERID.  Note: If this (or
+ORA_USERID) does not contain the password, it will be
+prompted for.</td>
+</tr>
+<tr><td>--no-comments</td>
+<td>Do not include object comments in the description.</td>
+</tr>
+<tr><td>--no-grants</td>
+<td>Do not include the grants in the description.</td>
+</tr>
+<tr><td>--no-quotas</td>
+<td>Do not include quotas on tablespaces.</td>
+</tr>
+<tr><td>--dont-merge-grants</td>
+<td>Show each grant as a separate statement.  In the case
+where multiple privileges are granted to the same
+user/role, each one will be a separate statement.</td>
+</tr>
+<tr><td>--default-tablespace</td>
+<td>Do not include tablespace specifications.</td>
+</tr>
+<tr><td>--default-storage</td>
+<td>Do not include storage specifications.</td>
+</tr>
+<tr><td>--include-sequence-values</td>
+<td>When describing a sequence include its current value.</td>
+</tr>
+<tr><td>--include-view-columns</td>
+<td>Include column names when describing views.</td>
+</tr>
+<tr><td>--object-name-only</td>
+<td>Do not include the DDL statements necessary to create
+the objects; only show the object names.</td>
+</tr>
+<tr><td>--name=NAME</td>
+<td>Include the objects in the schema(s) with the
+specified name(s).  This option may be specified
+multiple times and/or multiple names may be specified
+separated by commas.</td>
+</tr>
+<tr><td>--name-file=FILE</td>
+<td>This option behaves the same as --name except that
+the argument to the option is the name of a file
+containing the names of schemas to export, one per
+line.</td>
+</tr>
+<tr><td>--only-types=TYPES</td>
+<td>Only include objects of the specified type(s).  This
+may be specified multiple times and/or the types may
+be separated by commas.  The supported types are those
+valid for user_objects, all_objects, or dba_objects.
+If the type contains blanks you can either enclose
+the type within quotation marks or replace the blanks
+with underscores.</td>
+</tr>
+<tr><td>--only-if=CLAUSE</td>
+<td>Only include objects which match the specified
+criteria.  The criteria is added to the where clause
+of the select statement that is executed against
+user_objects, all_objects, or dba_objects.</td>
+</tr>
+<tr><td>--use-dba-views</td>
+<td>Use dba_xxx views for retrieving the information
+about the object.  If the connecting user does not
+have security to see them, an error will result.</td>
+</tr>
+<tr><td>--include-roles</td>
+<td>Include all roles that this schema has been granted
+&quot;with admin option.&quot;</td>
+</tr>
+<tr><td>--include-users</td>
+<td>Include a create user statement for each schema.</td>
+</tr>
+<tr><td>--include-contexts</td>
+<td>Include contexts in output which reference packages
+owned by the schema(s).</td>
+</tr>
+<tr><td>--max-long-size=N</td>
+<td>Specify the maximum length of a view or trigger. This
+defaults to 128K.</td>
+</tr>
+<tr><td>--as-of-scn=SCN</td>
+<td>All queries performed to retrieve information about
+the object will use a flashback query to the specified
+system change number.</td>
+</tr>
+<tr><td>--as-of-timestamp=TS</td>
+<td>All queries performed to retrieve information about
+the object will use a flashback query to the specified
+timestamp expression.</td>
+</tr>
+<tr><td>--log-file=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-level=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-prefix=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="dumpcsv">
+<h1>DumpCSV</h1>
+<p>This utility is used to dump information from the database into a comma
+separated file.</p>
+<div class="section" id="id9">
+<h2>Usage</h2>
+<p>DumpCSV [options] SQL [FILENAME]</p>
+<p>When you run DumpCSV it will connect to the database, execute the SQL statement
+and place the results in the specified file.</p>
+</div>
+<div class="section" id="id10">
+<h2>Arguments</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>SQL</td>
+<td>The SQL statement that is to be used to select the
+data to be dumped.  This will normally be enclosed in
+quotes. When the --sql-in-file option is specified,
+however, it contains the name of a file containing
+the SQL statement.</td>
+</tr>
+<tr><td>FILENAME</td>
+<td>Name of the file in which the output will be placed.
+If omitted or specified as '-', then the output will
+be shown on the screen (stdout).</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id11">
+<h2>Options</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>-t, --traceback</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--show-banner</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--version</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>-h, --help</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--schema=SCHEMA</td>
+<td>Use this to connect to the database and not the
+environment variable ORA_USERID.  Note: If this (or
+ORA_USERID) does not contain the password, it will be
+prompted for.</td>
+</tr>
+<tr><td>--record-sep=CHAR</td>
+<td>Use the specified character as the separator
+character between records (rows).  If not specified a
+new line will be started for each row.</td>
+</tr>
+<tr><td>--field-sep=CHAR</td>
+<td>Use the specified character as the separator
+character between fields (columns).  If not
+specified, a comma is used.</td>
+</tr>
+<tr><td>--string-encloser=CHAR</td>
+<td>Use the specified character around string fields.  If
+not specified, quotation marks (&quot;) will be used.</td>
+</tr>
+<tr><td>--escape-char=CHAR</td>
+<td>Use the specified character before any string
+encloser characters in a string field.  If not
+specified, a back slash () will be used.</td>
+</tr>
+<tr><td>--report-point=N</td>
+<td>Display a message every N rows processed.  If not
+specified, no progress messages will be issued.</td>
+</tr>
+<tr><td>--sql-in-file</td>
+<td>Specifies that the SQL parameter is the name of a
+file which contains the SQL statement to be executed.
+This allows for long SQL statements to be easily
+passed to DumpCSV.</td>
+</tr>
+<tr><td>--log-file=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-level=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-prefix=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="dumpdata">
+<h1>DumpData</h1>
+<p>This utility is used to dump data from an Oracle table in the form of insert
+SQL statements that can be used to load the data elsewhere.</p>
+<div class="section" id="id12">
+<h2>Usage</h2>
+<p>DumpData [options] TABLENAME</p>
+<p>When you run DumpData it will connect to the database and display the data from
+the specified table as insert statements.</p>
+</div>
+<div class="section" id="id13">
+<h2>Arguments</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>TABLENAME</td>
+<td>The name of the table to dump and insert into.  If
+--source-query is specified, then this is only the
+name of the table to use in the insert statements.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id14">
+<h2>Options</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>-t, --traceback</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--show-banner</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--version</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>-h, --help</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--schema=SCHEMA</td>
+<td>Use this to connect to the database and not the
+environment variable ORA_USERID.  Note: If this (or
+ORA_USERID) does not contain the password, it will be
+prompted for.</td>
+</tr>
+<tr><td>--sort-by=STR</td>
+<td>Append an &quot;order by&quot; clause with this value to the
+query.</td>
+</tr>
+<tr><td>--source-query=STR</td>
+<td>Use the specified SQL instead of doing a select *
+from Table.  NOTE: the query does not need to select
+from Table; however the insert statements that are
+generated will always insert into Table.</td>
+</tr>
+<tr><td>--log-file=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-level=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-prefix=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="exportcolumn">
+<h1>ExportColumn</h1>
+<p>This utility is used to dump the contents of a column from an Oracle table into
+the specified file.</p>
+<div class="section" id="id15">
+<h2>Usage</h2>
+<p>ExportColumn [options] STATEMENT FILENAME [VALUES ...]</p>
+<p>When you run ExportColumn it will connect to the database, select the column
+specified and place the contents of that column into the specified file.</p>
+</div>
+<div class="section" id="id16">
+<h2>Arguments</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>STATEMENT</td>
+<td>Specifies the column to be exported.  This is either
+a SQL statement to execute, the name of the file
+containing the statement to execute if the
+--statement-in-file option is specified, or the name
+of the column which is to be exported in the form
+[Owner.]Table.Column (in this case a select statement
+will be fabricated with the values argument making up
+the where clause).</td>
+</tr>
+<tr><td>FILENAME</td>
+<td>The name of the file into which the column is to be
+dumped.</td>
+</tr>
+<tr><td>VALUES</td>
+<td>This is a space separated list of name=VALUE which
+will be used for bind variables if a SQL statement is
+specified or will be used in the where clause if
+[Owner.]Table.Column is specified for STATEMENT.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id17">
+<h2>Options</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>-t, --traceback</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--show-banner</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--version</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>-h, --help</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--schema=SCHEMA</td>
+<td>Use this to connect to the database and not the
+environment variable ORA_USERID.  Note: If this (or
+ORA_USERID) does not contain the password, it will be
+prompted for.</td>
+</tr>
+<tr><td>--binary</td>
+<td>The column to be exported is a BLOB or LONG RAW and
+not a CLOB or LONG.</td>
+</tr>
+<tr><td>--statement-in-file</td>
+<td>The argument STATEMENT is to be taken as the name of
+a file from which to get the SQL statement to execute.</td>
+</tr>
+<tr><td>--log-file=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-level=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-prefix=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="exportdata">
+<h1>ExportData</h1>
+<p>This utility is used to export data from the database in a transportable
+format.  It is reloaded using the ImportData utility.  This is an alternative
+to Oracle’s import and export utilities for the movement of data. These
+utilities do not import or export object definitions, however.</p>
+<div class="section" id="id18">
+<h2>Usage</h2>
+<p>ExportData [options] FILENAME</p>
+<p>When you run ExportData it will connect to the database and export the data
+from the tables for the specified schema into the specified file.</p>
+</div>
+<div class="section" id="id19">
+<h2>Arguments</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>FILENAME</td>
+<td>The name of the file where the export will be placed.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id20">
+<h2>Options</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>-t, --traceback</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--show-banner</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--version</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>-h, --help</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--schema=SCHEMA</td>
+<td>Use this to connect to the database and not the
+environment variable ORA_USERID.  Note: If this (or
+ORA_USERID) does not contain the password, it will be
+prompted for.</td>
+</tr>
+<tr><td>--array-size=N</td>
+<td>This is the number of rows that will be read from the
+database at one time.  It is recommended to set this
+to as large a value as possible without incurring
+paging.</td>
+</tr>
+<tr><td>--report-point=N</td>
+<td>Display a message every N rows processed.  If not
+specified, no progress messages will be issued during
+the export of a table.</td>
+</tr>
+<tr><td>--max-long-size=N</td>
+<td>Specify the maximum length of a long or long raw
+column. This defaults to 128K.</td>
+</tr>
+<tr><td>--set-role=ROLE</td>
+<td>Enable this role after connecting to the database and
+prior to executing any SQL on that database.</td>
+</tr>
+<tr><td>--include-schema-name</td>
+<td>Store the name of the schema being exported along
+with the table name in the export file. This is
+useful for multiple schema exports.</td>
+</tr>
+<tr><td>--include-tables=LIST</td>
+<td>Only export the tables specified in the list.  This
+option may be specified multiple times and/or
+multiple tables may be specified separated by commas.</td>
+</tr>
+<tr><td>--exclude-tables=LIST</td>
+<td>Export all tables for the schema except for the
+tables specified in the list.  This option may be
+specified multiple times and/or multiple tables may
+be specified separated by commas. NOTE: only one of
+--include-tables and --exclude-tables is used. If both
+are specified, then --include-tables is used.</td>
+</tr>
+<tr><td>--skip=N</td>
+<td>Number of rows to skip before starting export.  NOTE:
+If you are exporting more than one table, this limit
+will be applied independently to each table that is
+exported.</td>
+</tr>
+<tr><td>--row-limit=N</td>
+<td>Number of rows to export.  NOTE: if you are exporting
+more than one table, this limit will be applied
+independently to each table that is exported.</td>
+</tr>
+<tr><td>--log-file=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-level=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-prefix=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="exportobjects">
+<h1>ExportObjects</h1>
+<p>This utility is used to extract the syntax of all objects in the specified
+schemas.  Each object will be extracted into its own file within
+sub-directories of the specified directory.</p>
+<div class="section" id="id21">
+<h2>Usage</h2>
+<p>ExportObjects [options]</p>
+<p>This utility connects to the database and determines the objects that match the
+selection criteria (owner, type).  It then proceeds to create a sub-directory
+for each owner and a sub-directory under that for each type of object.  It then
+describes the syntax for each object into a separate file within the type
+sub-directory.</p>
+</div>
+<div class="section" id="id22">
+<h2>Options</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>-t, --traceback</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--show-banner</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--version</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>-h, --help</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--schema=SCHEMA</td>
+<td>Use this to connect to the database and not the
+environment variable ORA_USERID.  Note: If this (or
+ORA_USERID) does not contain the password, it will be
+prompted for.</td>
+</tr>
+<tr><td>--no-comments</td>
+<td>Do not include object comments in the description.</td>
+</tr>
+<tr><td>--no-grants</td>
+<td>Do not include the grants in the description.</td>
+</tr>
+<tr><td>--no-quotas</td>
+<td>Do not include quotas on tablespaces.</td>
+</tr>
+<tr><td>--no-related</td>
+<td>Do not include related objects in the description
+(e.g. the body of a package, the indexes and
+constraints for a table, etc.).</td>
+</tr>
+<tr><td>--no-triggers</td>
+<td>Do not include related triggers in the description.</td>
+</tr>
+<tr><td>--dont-merge-grants</td>
+<td>Show each grant as a separate statement.  In the case
+where multiple privileges are granted to the same
+user/role, each one will be a separate statement.</td>
+</tr>
+<tr><td>--default-tablespace</td>
+<td>Do not include tablespace specifications.</td>
+</tr>
+<tr><td>--default-storage</td>
+<td>Do not include storage specifications.</td>
+</tr>
+<tr><td>--use-dba-views</td>
+<td>Use dba_xxx views for retrieving the information
+about the object.  If the connecting user does not
+have security to see them, an error will result.</td>
+</tr>
+<tr><td>--include-sequence-values</td>
+<td>When describing a sequence include its current value.</td>
+</tr>
+<tr><td>--include-view-columns</td>
+<td>Include column names when describing views.</td>
+</tr>
+<tr><td>--include-roles</td>
+<td>Include all roles that the schema(s) have been
+granted  &quot;with admin option.&quot;</td>
+</tr>
+<tr><td>--include-users</td>
+<td>Include a create user statement for each schema.</td>
+</tr>
+<tr><td>--include-contexts</td>
+<td>Include contexts in output which reference packages
+owned by the schema(s).</td>
+</tr>
+<tr><td>--split-related</td>
+<td>When describing objects do not include related
+objects in the same file as their parent; instead,
+put each related object in its own file.</td>
+</tr>
+<tr><td>--name=NAME</td>
+<td>Include the objects in the schema(s) with the
+specified name(s).  This option may be specified
+multiple times and/or multiple names may be specified
+separated by commas.</td>
+</tr>
+<tr><td>--name-file=FILE</td>
+<td>This option behaves the same as --name except that
+the argument to the option is the name of a file
+containing the names of schemas to export, one per
+line.</td>
+</tr>
+<tr><td>--only-types=TYPES</td>
+<td>Only include objects of the specified type(s).  This
+may be specified multiple times and/or the types may
+be separated by commas.  The supported types are those
+valid for user_objects, all_objects, or dba_objects.
+If the type contains blanks you can either enclose
+the type within quotation marks or replace the blanks
+with underscores.</td>
+</tr>
+<tr><td>--only-if=CLAUSE</td>
+<td>Only include objects which match the specified
+criteria.  The criteria is added to the where clause
+of the select statement that is executed against
+user_objects, all_objects, or dba_objects.</td>
+</tr>
+<tr><td>--max-long-size=N</td>
+<td>Specify the maximum length of a view or trigger. This
+defaults to 128K.</td>
+</tr>
+<tr><td>--as-of-scn=SCN</td>
+<td>All queries performed to retrieve information about
+objects will use a flashback query to the specified
+system change number.</td>
+</tr>
+<tr><td>--as-of-timestamp=TS</td>
+<td>All queries performed to retrieve information about
+objects will use a flashback query to the specified
+timestamp expression.</td>
+</tr>
+<tr><td>--base-dir=DIR</td>
+<td>Use this directory as the base where the extract is
+to be done rather than the default of the current
+directory.</td>
+</tr>
+<tr><td>--suppress-owner-dir</td>
+<td>When creating the directories to put the object in,
+do not include the schema name in the path.</td>
+</tr>
+<tr><td>--log-file=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-level=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-prefix=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="exportxml">
+<h1>ExportXML</h1>
+<p>This utility is used to export data from the database in an XML format.</p>
+<div class="section" id="id23">
+<h2>Usage</h2>
+<p>ExportXML [options] FILENAME SOURCE</p>
+<p>When you run ExportXML it will connect to the database and export the data from
+the table or view for the specified schema into the specified file.</p>
+</div>
+<div class="section" id="id24">
+<h2>Arguments</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>FILENAME</td>
+<td>Name of the file in which the output will be placed.
+If omitted or specified as '-' the output will be
+shown on the screen (stdout).</td>
+</tr>
+<tr><td>SOURCE</td>
+<td>Name of the table or view to be exported as XML.
+This may be qualified by a schema.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id25">
+<h2>Options</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>-t, --traceback</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--show-banner</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--version</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>-h, --help</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--schema=SCHEMA</td>
+<td>Use this to connect to the database and not the
+environment variable ORA_USERID.  Note: If this (or
+ORA_USERID) does not contain the password, it will be
+prompted for.</td>
+</tr>
+<tr><td>--array-size=N</td>
+<td>This is the number of rows that will be read from the
+database at one time.  It is recommended to set this
+to as large a value as possible without incurring
+paging.</td>
+</tr>
+<tr><td>--report-point=N</td>
+<td>Display a message every N rows processed.  If not
+specified, no progress messages will be issued.</td>
+</tr>
+<tr><td>--set-role=ROLE</td>
+<td>Enable this role after connecting to the database and
+prior to executing any SQL on that database.</td>
+</tr>
+<tr><td>--date-format=FORMAT</td>
+<td>This is the format that is applied when exporting
+dates.  The allowable options match those of the
+C/C++ strptime routine and default to
+‘%Y-%m-%d %H:%M:%S’.</td>
+</tr>
+<tr><td>--sort-by=STR</td>
+<td>Append an &quot;order by&quot; clause with this value to the
+query.</td>
+</tr>
+<tr><td>--log-file=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-level=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-prefix=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="generatepatch">
+<h1>GeneratePatch</h1>
+<p>This utility is used to create a script that will upgrade one set of objects to
+match another set.</p>
+<div class="section" id="id26">
+<h2>Usage</h2>
+<p>GeneratePatch [options] FROMDIR TODIR</p>
+<p>Before you run GeneratePatch, you should do an ExportObjects on the source and
+target databases into separate directories.  You then run GeneratePatch
+specifying these two directories and a script will be generated to stdout.  You
+should redirect the output to a file using the standard redirection character
+'&gt;'.</p>
+</div>
+<div class="section" id="id27">
+<h2>Arguments</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>FROMDIR</td>
+<td>Name of the directory containing the source objects.</td>
+</tr>
+<tr><td>TODIR</td>
+<td>Name of the directory containing the target objects
+that need to be transformed to match the source
+objects.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id28">
+<h2>Options</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>-t, --traceback</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--show-banner</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--version</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>-h, --help</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--schema=SCHEMA</td>
+<td>Use this to connect to the database and not the
+environment variable ORA_USERID.  Note: If this (or
+ORA_USERID) does not contain the password, it will be
+prompted for.</td>
+</tr>
+<tr><td>--no-comments</td>
+<td>Do not include object comments in the description.</td>
+</tr>
+<tr><td>--no-grants</td>
+<td>Do not include the grants in the description.</td>
+</tr>
+<tr><td>--use-dba-views</td>
+<td>Use dba_xxx views for retrieving the information
+about the object.  If the connecting user does not
+have security to see them, an error will result.</td>
+</tr>
+<tr><td>--log-file=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-level=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-prefix=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="generateview">
+<h1>GenerateView</h1>
+<p>This utility is used to create a view that matches the columns of each table in
+a schema.</p>
+<div class="section" id="id29">
+<h2>Usage</h2>
+<p>GenerateView [options]</p>
+</div>
+<div class="section" id="id30">
+<h2>Options</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>-t, --traceback</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--show-banner</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--version</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>-h, --help</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--schema=SCHEMA</td>
+<td>Use this to connect to the database and not the
+environment variable ORA_USERID.  Note: If this (or
+ORA_USERID) does not contain the password, it will be
+prompted for.</td>
+</tr>
+<tr><td>--add-prefix=STR</td>
+<td>Add the string prefix to the start of the name of
+each table when generating the name of the view.</td>
+</tr>
+<tr><td>--remove-prefix=STR</td>
+<td>Remove the string prefix from the start of the name
+of each table when generating the name of the view.
+If the table does not have the string prefix at the
+start of its name, nothing is done to the name when
+generating the name for the view.</td>
+</tr>
+<tr><td>--add-suffix=STR</td>
+<td>Add the string suffix to the end of the name of each
+table when generating the name of the view.</td>
+</tr>
+<tr><td>--remove-suffix=STR</td>
+<td>Remove the string suffix from the end of the name of
+each table when generating the name of the view.  If
+the table does not have the string suffix at the end
+of its name, nothing is done to the name when
+generating the name for the view.</td>
+</tr>
+<tr><td>--include-tables=LIST</td>
+<td>Only generate views for the tables specified in the
+list.  This option may be specified multiple times
+and/or multiple tables may be specified separated by
+commas.</td>
+</tr>
+<tr><td>--exclude-tables=LIST</td>
+<td>Generate views for all tables for the schema except
+for the tables specified in the list.  This option
+may be specified multiple times and/or multiple
+tables may be specified separated by commas.</td>
+</tr>
+<tr><td>--log-file=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-level=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-prefix=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="importcolumn">
+<h1>ImportColumn</h1>
+<p>This utility is used to load a column in an Oracle table from the contents of
+the specified file.</p>
+<div class="section" id="id31">
+<h2>Usage</h2>
+<p>ImportColumn [options] STATEMENT FILENAME [VALUES ...]</p>
+<p>When you run ImportColumn it will connect to the database and load the
+specified column with the contents of the specified file.</p>
+</div>
+<div class="section" id="id32">
+<h2>Arguments</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>STATEMENT</td>
+<td>Specifies the column to be imported.  This is either
+a SQL statement to execute, the name of the file
+containing the statement to execute if the
+--statement-in-file option is specified, or the name
+of the column which is to be imported in the form
+[Owner.]Table.Column (in this case insert and update
+statements will be fabricated using the VALUES
+argument for the insert items or where clause).</td>
+</tr>
+<tr><td>FILENAME</td>
+<td>The name of the file from which the column is to be
+loaded.</td>
+</tr>
+<tr><td>VALUES</td>
+<td>This is a space separated list of name=VALUE which
+will be used for bind variables if a SQL statement is
+specified or will be used in the where clause if
+[Owner.]Table.Column is specified for STATEMENT.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id33">
+<h2>Options</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>-t, --traceback</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--show-banner</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--version</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>-h, --help</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--schema=SCHEMA</td>
+<td>Use this to connect to the database and not the
+environment variable ORA_USERID.  Note: If this (or
+ORA_USERID) does not contain the password, it will be
+prompted for.</td>
+</tr>
+<tr><td>--binary</td>
+<td>The column to be imported is a BLOB or LONG RAW and
+not a CLOB or LONG.</td>
+</tr>
+<tr><td>--statement-in-file</td>
+<td>The argument STATEMENT is to be taken as the name of
+a file from which to get the SQL statement to execute.</td>
+</tr>
+<tr><td>--log-file=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-level=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-prefix=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="importdata">
+<h1>ImportData</h1>
+<p>This utility is used to import data into the database that has been exported
+via ExportData.  ExportData and ImportData are an alternative to Oracle’s
+import and export utilities for the movement of data.  These utilities do not
+import or export object definitions, however.</p>
+<div class="section" id="id34">
+<h2>Usage</h2>
+<p>ImportData [options] FILENAME</p>
+<p>When you run ImportData it will connect to the database and read from the
+specified file and import the data from it into existing tables in the
+database.</p>
+</div>
+<div class="section" id="id35">
+<h2>Arguments</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>FILENAME</td>
+<td>The name of the file that ImportData will read.  To
+use stdin specify as '-'.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id36">
+<h2>Options</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>-t, --traceback</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--show-banner</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--version</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>-h, --help</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--schema=SCHEMA</td>
+<td>Use this to connect to the database and not the
+environment variable ORA_USERID.  Note: If this (or
+ORA_USERID) does not contain the password, it will be
+prompted for.</td>
+</tr>
+<tr><td>--array-size=N</td>
+<td>This is the number of rows that will be read from the
+database at one time.  It is recommended to set this
+to as large a value as possible without incurring
+paging.</td>
+</tr>
+<tr><td>--commit-point=N</td>
+<td>Issue a commit every N rows processed.  If not
+specified, a commit will only be issued after all the
+data has been imported.</td>
+</tr>
+<tr><td>--report-point=N</td>
+<td>Display a message every N rows processed.  If not
+specified, no progress messages will be issued for
+each table imported.</td>
+</tr>
+<tr><td>--set-role=ROLE</td>
+<td>Enable this role after connecting to the database and
+prior to executing any SQL on that database.</td>
+</tr>
+<tr><td>--include-tables=LIST</td>
+<td>Only import the tables specified in the list.  This
+option may be specified multiple times and/or
+multiple tables may be specified separated by commas.</td>
+</tr>
+<tr><td>--exclude-tables=LIST</td>
+<td>Import all tables in the file except for the tables
+specified in the list.  This option may be specified
+multiple times and/or multiple tables may be
+specified separated by commas.</td>
+</tr>
+<tr><td>--log-file=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-level=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-prefix=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="importxml">
+<h1>ImportXML</h1>
+<p>This utility is used to import XML format data into the database.</p>
+<div class="section" id="id37">
+<h2>Usage</h2>
+<p>ImportXML [options] FILENAME TABLENAME</p>
+<p>When you run ImportXML it will connect to the database and import the data from
+the specified file into the table or view in the specified schema.</p>
+</div>
+<div class="section" id="id38">
+<h2>Arguments</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>FILENAME</td>
+<td>Name of the file which is to be imported.  If
+specified as '-' then the input will be via stdin.</td>
+</tr>
+<tr><td>TABLENAME</td>
+<td>Name of the table or view to be imported as XML.
+This may be qualified by a schema.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id39">
+<h2>Options</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>-t, --traceback</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--show-banner</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--version</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>-h, --help</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--schema=SCHEMA</td>
+<td>Use this to connect to the database and not the
+environment variable ORA_USERID.  Note: If this (or
+ORA_USERID) does not contain the password, it will be
+prompted for.</td>
+</tr>
+<tr><td>--array-size=N</td>
+<td>This is the number of rows that will be read from the
+database at one time.  It is recommended to set this
+to as large a value as possible without incurring
+paging.</td>
+</tr>
+<tr><td>--commit-point=N</td>
+<td>Issue a commit every N rows processed.  If not
+specified, a commit will only be issued after the
+entire file is imported.</td>
+</tr>
+<tr><td>--report-point=N</td>
+<td>Display a message every N rows processed.  If not
+specified, no progress messages will be issued.</td>
+</tr>
+<tr><td>--set-role=ROLE</td>
+<td>Enable this role after connecting to the database and
+prior to executing any SQL on that database.</td>
+</tr>
+<tr><td>--date-format=FORMAT</td>
+<td>This is the format that is applied when importing
+dates.  The allowable options match those of the
+C/C++ strptime routine and default to
+‘%Y-%m-%d %H:%M:%S’.</td>
+</tr>
+<tr><td>--log-file=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-level=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-prefix=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="patchdb">
+<h1>PatchDB</h1>
+<p>This utility is used to modify the contents of a database using scripts with
+error checking. Currently all that is supported is SQL scripts which consist of
+any number of valid Oracle statements. Blank lines are preserved for all PL/SQL
+sources unlike SQL*Plus.</p>
+<div class="section" id="id40">
+<h2>Usage</h2>
+<p>PatchDB [options] FILENAME</p>
+<p>When you run PatchDB, the statements in the specified file are executed in
+order with error checking taking place after each statement is executed. The
+file may contain any valid Oracle statements (DDL, DML, or PL/SQL blocks).</p>
+</div>
+<div class="section" id="id41">
+<h2>Arguments</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>FILENAME</td>
+<td>The name of the file containing the statements to
+execute or '-' to indicate that the statements are to
+be read from stdin.  NOTE: if the file specified does
+not exist and does not have the extension &quot;.sql&quot;,
+then an attempt will be made to read from the file
+after appending the extension &quot;.sql&quot;.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id42">
+<h2>Options</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>-t, --traceback</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--show-banner</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--version</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>-h, --help</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--schema=SCHEMA</td>
+<td>Use this to connect to the database and not the
+environment variable ORA_USERID.  Note: If this (or
+ORA_USERID) does not contain the password, it will be
+prompted for.</td>
+</tr>
+<tr><td>--on-error-continue</td>
+<td>If an error is encountered continue processing the
+script.</td>
+</tr>
+<tr><td>--with-recompile</td>
+<td>After the script is finished do a recompile of all
+the invalid objects in the current schema.</td>
+</tr>
+<tr><td>--on-recompile-error-continue</td>
+<td>If an error is encountered during recompile continue
+to recompile all other invalid objects.</td>
+</tr>
+<tr><td>--log-file=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-level=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-prefix=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="rebuildtable">
+<h1>RebuildTable</h1>
+<p>This utility is used to generate the DDL necessary to recreate a table
+including all indexes, foreign keys and referencing foreign keys.</p>
+<div class="section" id="id43">
+<h2>Usage</h2>
+<p>RebuildTable [options] TABLENAME</p>
+<p>When you run RebuildTable it will generate the statements necessary to rebuild
+the specified table with the specified options.  The output of RebuildTable
+should be redirected to a file using the standard redirection character '&gt;'.</p>
+</div>
+<div class="section" id="id44">
+<h2>Arguments</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>TABLENAME</td>
+<td>Name of the table that you wish to rebuild.  This may
+be qualified by a schema.  However, unless DBA views
+are used, foreign keys from other schemas that refer
+to this table may not be properly included.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id45">
+<h2>Options</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>-t, --traceback</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--show-banner</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--version</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>-h, --help</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--schema=SCHEMA</td>
+<td>Use this to connect to the database and not the
+environment variable ORA_USERID.  Note: If this (or
+ORA_USERID) does not contain the password, it will be
+prompted for.</td>
+</tr>
+<tr><td>--no-comments</td>
+<td>Do not include object comments in the description.</td>
+</tr>
+<tr><td>--no-grants</td>
+<td>Do not include the grants in the description.</td>
+</tr>
+<tr><td>--no-related</td>
+<td>Do not include related objects in the description
+(e.g. the body of a package, the indexes and
+constraints for a table, etc.).</td>
+</tr>
+<tr><td>--no-triggers</td>
+<td>Do not include related triggers in the description.</td>
+</tr>
+<tr><td>--dont-merge-grants</td>
+<td>Show each grant as a separate statement.  In the case
+where multiple privileges are granted to the same
+user/role, each one will be a separate statement.</td>
+</tr>
+<tr><td>--default-tablespace</td>
+<td>Do not include tablespace specifications.</td>
+</tr>
+<tr><td>--default-storage</td>
+<td>Do not include storage specifications.</td>
+</tr>
+<tr><td>--use-dba-views</td>
+<td>Use dba_xxx views for retrieving the information
+about the object.  If the connecting user does not
+have security to see them, an error will result.</td>
+</tr>
+<tr><td>--max-long-size=N</td>
+<td>Specify the maximum length of a view or trigger. This
+defaults to 128K.</td>
+</tr>
+<tr><td>--with-copydata</td>
+<td>The script will use the CopyData tool to move the
+data from the current table to the rebuilt table;
+otherwise an insert statement will be generated.</td>
+</tr>
+<tr><td>--log-file=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-level=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--log-prefix=</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="recompilesource">
+<h1>RecompileSource</h1>
+<p>This utility is used to recompile invalid objects in a database.</p>
+<div class="section" id="id46">
+<h2>Usage</h2>
+<p>RecompileSource [options]</p>
+<p>When you run RecompileSource, it will connect to the database, find all invalid
+objects (optionally filtering on owner), and proceed to recompile them
+iteratively until a complete pass shows no changes in the list of invalid
+objects.</p>
+</div>
+<div class="section" id="id47">
+<h2>Options</h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>Name</td>
+<td>Description</td>
+</tr>
+<tr><td>-t, --traceback</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--show-banner</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--version</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>-h, --help</td>
+<td>see <a class="reference internal" href="#common-options">Common Options</a></td>
+</tr>
+<tr><td>--schema=SCHEMA</td>
+<td>Use this to connect to the database and not the
+environment variable ORA_USERID.  Note: If this (or
+ORA_USERID) does not contain the password, it will be
+prompted for.</td>
+</tr>
+<tr><td>--on-error-continue</td>
+<td>If an error is encountered during the recompile of an
+object continue processing with the next object.</td>
+</tr>
+<tr><td>--connect-as-owner</td>
+<td>When recompiling an object, establish a connection to
+the database as the owner of that object, using the
+password of the initially established connection as
+the password for the owning schema.</td>
+</tr>
+<tr><td>--include=LIST</td>
+<td>Only recompile invalid objects in the specified
+schemas.  This option may be specified multiple times
+and/or multiple schemas may be specified separated by
+commas.</td>
+</tr>
+<tr><td>--include-file=FILE</td>
+<td>As --include except that the list of schemas is found
+in the specified file.</td>
+</tr>
+<tr><td>--exclude=LIST</td>
+<td>Do not recompile invalid objects in the specified
+schemas.  This option may be specified multiple times
+and/or multiple schemas may be specified separated by
+commas.</td>
 </tr>
 <tr><td>--log-file=</td>
 <td>see <a class="reference internal" href="#common-options">Common Options</a></td>
