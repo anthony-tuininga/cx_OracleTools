@@ -51,7 +51,7 @@ class Handler(object):
             name, dataType, size, internalSize, prec, scale, nullsOk = item
             if dataType == self.connection.DATETIME:
                 self.dateColumns[name.upper()] = None
-            else:
+            elif dataType != self.connection.CLOB:
                 dataType = self.connection.STRING
             self.columnIndexes[name.upper()] = len(bindVars)
             bindVars.append(self.cursor.var(dataType, size))
