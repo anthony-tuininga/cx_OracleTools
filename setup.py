@@ -52,6 +52,12 @@ executables = [
         cx_Freeze.Executable("RecompileSource.py"),
 ]
 
+if sys.platform != "win32":
+    dataFiles = []
+else:
+    dataFiles = [ ("", [ "LICENSE.TXT", "README.TXT", "HISTORY.txt",
+                         "doc/cx_OracleTools.html" ] ) ]
+
 buildOptions = dict(
         compressed = True,
         optimize = 2,
@@ -60,16 +66,20 @@ options = dict(build_exe = buildOptions)
 if sys.platform == "win32":
     options["bdist_msi"] = dict(
             upgrade_code = "{A77F0AB1-3E2A-4242-B6DD-700CF582345C}")
+else:
+    docFiles = "LICENSE.txt README.txt HISTORY.txt doc/cx_OracleTools.html"
+    options["bdist_rpm"] = dict(doc_files = docFiles)
 
 cx_Freeze.setup(
         name = "cx_OracleTools",
-        version = "7.5b2",
+        version = "8.0",
         description = "Tools for managing Oracle data and source code.",
         long_description = "Tools for managing Oracle data and source code.",
         license = "See LICENSE.txt",
         author = "Anthony Tuininga",
         author_email = "anthony.tuininga@gmail.com",
         url = "http://cx-oracletools.sourceforge.net",
+        data_files = dataFiles,
         cmdclass = dict(build_exe = build_exe),
         executables = executables,
         options = options)
