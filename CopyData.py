@@ -286,8 +286,9 @@ while True:
                 targetVars = []
             for sourceVar, targetVar, isLob in targetVars:
                 if isLob:
+                    lob = sourceVar.getvalue(pos)
                     targetVar.setvalue(targetPos,
-                           sourceVar.getvalue(pos).read())
+                           lob and lob.read())
                 else:
                     targetVar.copy(sourceVar, pos, targetPos)
     if insertPos:
