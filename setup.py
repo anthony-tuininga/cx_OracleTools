@@ -1,10 +1,14 @@
 import cx_Freeze
 import distutils.util
+import distutils.version
 import os
 import struct
 import sys
 
 from distutils.errors import DistutilsSetupError
+
+NAME = "cx_OracleTools"
+VERSION = "8.0"
 
 class build_exe(cx_Freeze.build_exe):
     user_options = cx_Freeze.build_exe.user_options + [
@@ -150,15 +154,26 @@ buildOptions = dict(
         replace_paths = [("*", "")])
 options = dict(build_exe = buildOptions)
 if sys.platform == "win32":
+    sversion = "%d.%d.%d" % \
+            distutils.version.StrictVersion(VERSION).version
+    oldUpgradeCode = "{A77F0AB1-3E2A-4242-B6DD-700CF582345C}"
+    if struct.calcsize("P") == 4:
+        upgradeCode = "{DA558DAE-C9C1-4C6F-82BC-5508DEBD4762}"
+    else:
+        upgradeCode = "{ED509B82-C0E2-4111-ADFF-F463F03B8548}"
+    upgradeData = [(oldUpgradeCode, None, sversion, None, 513, None,
+                    "REMOVEOLDOLDVERSION")]
     options["bdist_msi"] = dict(
-            upgrade_code = "{A77F0AB1-3E2A-4242-B6DD-700CF582345C}")
+            data = dict(Upgrade = upgradeData),
+            target_name = "%s-%s-%s" % (NAME, VERSION, oracleVersion),
+            upgrade_code = upgradeCode)
 else:
     docFiles = "LICENSE.txt README.txt HISTORY.txt doc/cx_OracleTools.html"
     options["bdist_rpm"] = dict(doc_files = docFiles)
 
 cx_Freeze.setup(
-        name = "cx_OracleTools",
-        version = "8.0",
+        name = NAME,
+        version = VERSION,
         description = "Tools for managing Oracle data and source code.",
         long_description = "Tools for managing Oracle data and source code.",
         license = "See LICENSE.txt",
