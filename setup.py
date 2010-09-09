@@ -1,5 +1,10 @@
 import cx_Freeze
+import distutils.util
+import os
+import struct
 import sys
+
+from distutils.errors import DistutilsSetupError
 
 class build_exe(cx_Freeze.build_exe):
     user_options = cx_Freeze.build_exe.user_options + [
@@ -22,6 +27,12 @@ class build_exe(cx_Freeze.build_exe):
         self.set_source_location("cx_Oracle", "trunk")
         self.set_source_location("cx_PyGenLib", "trunk")
         self.set_source_location("cx_PyOracleLib", "trunk")
+        dirName = "exe.%s-%s-%s" % \
+                (distutils.util.get_platform(), sys.version[0:3],
+                 oracleVersion)
+        self.build_exe = os.path.join(os.path.dirname(self.build_exe), dirName)
+        command = self.distribution.get_command_obj("build")
+        command.build_exe = self.build_exe
 
     def run(self):
         self.build_extension("cx_Logging")
@@ -30,6 +41,79 @@ class build_exe(cx_Freeze.build_exe):
         self.add_to_path("cx_PyOracleLib")
         cx_Freeze.build_exe.run(self)
 
+
+# tweak the RPM build command to include the Oracle version
+class bdist_rpm(cx_Freeze.bdist_rpm):
+
+    def run(self):
+        cx_Freeze.bdist_rpm.run(self)
+        specFile = os.path.join(self.rpm_base, "SPECS",
+                "%s.spec" % self.distribution.get_name())
+        queryFormat = "%{name}-%{version}-%{release}.%{arch}.rpm"
+        command = "rpm -q --qf '%s' --specfile %s" % (queryFormat, specFile)
+        origFileName = os.popen(command).read()
+        parts = origFileName.split("-")
+        parts.insert(2, oracleVersion)
+        newFileName = "-".join(parts)
+        self.move_file(os.path.join("dist", origFileName),
+                os.path.join("dist", newFileName))
+
+
+# method for determining Oracle version
+def GetOracleVersion(directoryToCheck):
+    if sys.platform in ("win32", "cygwin"):
+        subDirs = ["bin"]
+        filesToCheck = [
+                ("11g", "oraocci11.dll"),
+                ("10g", "oraocci10.dll"),
+                ("9i", "oraclient9.dll")
+        ]
+    elif sys.platform == "darwin":
+        subDirs = ["lib"]
+        filesToCheck = [
+                ("11g", "libclntsh.dylib.11.1"),
+                ("10g", "libclntsh.dylib.10.1"),
+                ("9i", "libclntsh.dylib.9.0")
+        ]
+    else:
+        if struct.calcsize("P") == 4:
+            subDirs = ["lib", "lib32"]
+        else:
+            subDirs = ["lib", "lib64"]
+        filesToCheck = [
+                ("11g", "libclntsh.so.11.1"),
+                ("10g", "libclntsh.so.10.1"),
+                ("9i", "libclntsh.so.9.0")
+        ]
+    for version, baseFileName in filesToCheck:
+        fileName = os.path.join(directoryToCheck, baseFileName)
+        if os.path.exists(fileName):
+            return version
+        for subDir in subDirs:
+            fileName = os.path.join(directoryToCheck, subDir, baseFileName)
+            if os.path.exists(fileName):
+                return version
+            dirName = os.path.dirname(directoryToCheck)
+            fileName = os.path.join(dirName, subDir, baseFileName)
+            if os.path.exists(fileName):
+                return version
+
+# try to determine the Oracle home
+userOracleHome = os.environ.get("ORACLE_HOME")
+if userOracleHome is not None:
+    oracleVersion = GetOracleVersion(userOracleHome)
+    if oracleVersion is None:
+        messageFormat = "Oracle home (%s) does not refer to an " \
+                "9i, 10g or 11g installation."
+        raise DistutilsSetupError(messageFormat % userOracleHome)
+else:
+    for path in os.environ["PATH"].split(os.pathsep):
+        oracleVersion = GetOracleVersion(path)
+        if oracleVersion is not None:
+            break
+    if oracleVersion is None:
+        raise DistutilsSetupError("cannot locate an Oracle software " \
+                "installation")
 
 executables = [
         cx_Freeze.Executable("CopyData.py"),
@@ -80,7 +164,7 @@ cx_Freeze.setup(
         author_email = "anthony.tuininga@gmail.com",
         url = "http://cx-oracletools.sourceforge.net",
         data_files = dataFiles,
-        cmdclass = dict(build_exe = build_exe),
+        cmdclass = dict(build_exe = build_exe, bdist_rpm = bdist_rpm),
         executables = executables,
         options = options)
 
