@@ -33,6 +33,8 @@ class build_exe(cx_Freeze.build_exe):
         self.build_exe = os.path.join(os.path.dirname(self.build_exe), dirName)
         command = self.distribution.get_command_obj("build")
         command.build_exe = self.build_exe
+        command = self.distribution.get_command_obj("install_exe")
+        command.build_dir = self.build_exe
 
     def run(self):
         self.build_extension("cx_Logging")
