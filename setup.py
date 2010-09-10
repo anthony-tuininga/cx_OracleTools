@@ -164,6 +164,7 @@ if sys.platform == "win32":
     upgradeData = [(oldUpgradeCode, None, sversion, None, 513, None,
                     "REMOVEOLDOLDVERSION")]
     options["bdist_msi"] = dict(
+            add_to_path = True,
             data = dict(Upgrade = upgradeData),
             target_name = "%s-%s-%s" % (NAME, VERSION, oracleVersion),
             upgrade_code = upgradeCode)
