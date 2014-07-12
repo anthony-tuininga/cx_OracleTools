@@ -246,7 +246,7 @@ updatePos = 0
 lastCommitted = 0
 lastReported = 0
 totalRowsFetched = 0
-iter = range(sourceCursor.arraysize)
+iter = list(range(sourceCursor.arraysize))
 reportPoint = options.reportPoint
 commitPoint = options.commitPoint
 rowLimit = options.rowLimit
@@ -265,7 +265,7 @@ while True:
         insertPos = rowsFetched
     else:
         if rowsFetched != sourceCursor.arraysize:
-            iter = range(rowsFetched)
+            iter = list(range(rowsFetched))
         for pos in iter:
             exists = 0
             if options.checkExists:

@@ -56,7 +56,7 @@ cursor.setinputsizes(p_TableName = cx_Oracle.STRING)
 
 # output the view syntax for each table
 for tableName in tables:
-    print >> sys.stderr, "Generating view for table", tableName + "..."
+    print("Generating view for table", tableName + "...", file = sys.stderr)
     fromClause = "from %s;" % tableName.lower()
     cursor.execute(None, p_TableName = tableName)
     columnNames = ["  " + n.lower() for n, in cursor]
@@ -72,10 +72,10 @@ for tableName in tables:
         tableName = tableName[:-len(options.removeSuffix)]
     if options.addSuffix:
         tableName += options.addSuffix
-    print "create or replace view " + tableName.lower() + " as"
-    print "select"
-    print ",\n".join(columnNames)
-    print fromClause
-    print
-print >> sys.stderr, "Done."
+    print("create or replace view " + tableName.lower() + " as")
+    print("select")
+    print(",\n".join(columnNames))
+    print(fromClause)
+    print()
+print("Done.", file = sys.stderr)
 

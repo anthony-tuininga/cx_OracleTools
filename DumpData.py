@@ -33,7 +33,7 @@ cursor = connection.cursor()
 cursor.execute(query)
 description = cursor.description
 format = "insert into %s (\n  %s\n) values (\n  %s\n);\n"
-sequence = range(len(description))
+sequence = list(range(len(description)))
 for row in cursor:
     names = []
     values = []
@@ -51,6 +51,6 @@ for row in cursor:
     if names:
         sql = "insert into %s (\n  %s\n) values (\n  %s\n);\n" % \
                 (options.tableName, ",\n  ".join(names), ",\n  ".join(values))
-        print sql
-print "commit;"
+        print(sql)
+print("commit;")
 

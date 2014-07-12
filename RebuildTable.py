@@ -46,25 +46,26 @@ table = environment.ObjectByType(owner, name, objType)
 columnNames = [c[0] for c in table.columns]
 
 # produce the output
-print "rename", name, "to bk;"
-print
+print("rename", name, "to bk;")
+print()
 table.Export(sys.stdout, options.wantTablespace, options.wantStorage)
 if options.wantGrants:
     table.ExportPrivileges(sys.stdout, options.mergeGrants)
 if options.withCopydata:
     selectClauses = ", ".join(columnNames)
-    print "!CopyData --no-check-exists --commit-point 250 --array-size 250",
-    print "'select %s from bk'" % selectClauses,
-    print name
+    print("!CopyData --no-check-exists --commit-point 250 --array-size 250",
+            end = ' ')
+    print("'select %s from bk'" % selectClauses, end = ' ')
+    print(name)
 else:
     selectClauses = ",\n  ".join(columnNames)
-    print "insert into", name
-    print "select\n  %s\nfrom bk;" %  selectClauses
-    print
-    print "commit;"
-print
-print "drop table bk cascade constraints;"
-print
+    print("insert into", name)
+    print("select\n  %s\nfrom bk;" %  selectClauses)
+    print()
+    print("commit;")
+print()
+print("drop table bk cascade constraints;")
+print()
 constraints = []
 if options.wantComments:
     table.ExportComments(sys.stdout)
