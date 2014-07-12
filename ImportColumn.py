@@ -67,7 +67,7 @@ else:
     updateStatement = "update %s.%s set %s = :%s where %s" % \
             (owner, table, column, column, " and ".join(clauses))
     options.values[column] = data
-    names = options.values.keys()
+    names = list(options.values.keys())
     values = [":%s" % n for n in names]
     statement = "insert into %s.%s (%s) values (%s)" % \
             (owner, table, ",".join(names), ",".join(values))
@@ -77,7 +77,7 @@ else:
 # execute the statement
 try:
     cursor.execute(statement, **options.values)
-except cx_Oracle.DatabaseError, e:
+except cx_Oracle.DatabaseError as e:
     e, = e.args
     if e.code == 1 and options.isColumn:
         cursor.setinputsizes(**initialBinds)
@@ -86,5 +86,5 @@ except cx_Oracle.DatabaseError, e:
         raise
 connection.commit()
 
-print >> sys.stderr, "Column succesfully imported."
+print("Column succesfully imported.", file = sys.stderr)
 

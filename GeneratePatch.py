@@ -111,7 +111,7 @@ def OutputDropStatement(statement, objsToDrop, objOwner, objName, objType,
     dependsOn = DependsOn(statement[0], objOwner, objName, objType)
     if dependsOn:
         refOwner, refName, refType = dependsOn
-        if objsToDrop.has_key((refOwner, refName, refType)):
+        if (refOwner, refName, refType) in objsToDrop:
             return
     if objType in ("UNIQUE INDEX", "BITMAP INDEX"):
         objType = "INDEX"
@@ -119,11 +119,11 @@ def OutputDropStatement(statement, objsToDrop, objOwner, objName, objType,
         objType = "CONSTRAINT"
     describer.SetOwner(objOwner, objType)
     if not hardDrop and objType == "TABLE":
-        print "--",
+        print("--", end=' ')
     if objType == "CONSTRAINT":
-        print "alter table", refName.lower()
-    print "drop", objType.lower(), objName.lower() + ";"
-    print
+        print("alter table", refName.lower())
+    print("drop", objType.lower(), objName.lower() + ";")
+    print()
 
 # define a function which will return the grants in a set of statements
 def ParseGrants(statements):
@@ -144,7 +144,7 @@ def ParseGrants(statements):
     return grants
 
 # acquire the list of objects that have changed
-print >> sys.stderr, "Acquiring differences..."
+print("Acquiring differences...", file = sys.stderr)
 newFiles, modifiedFiles, removedFiles = \
         cx_Utils.PerformDiff(options.fromDir, options.toDir)
 
@@ -174,7 +174,7 @@ if preSourceObjs:
                     refType))
 
     # now order them
-    print >> sys.stderr, "Ordering pre source objects..."
+    print("Ordering pre source objects...", file = sys.stderr)
     preSourceObjs = cx_OracleObject.OrderObjects(preSourceObjs, dependencies)
 
 # order the source objects by retrieving dependencies
@@ -185,15 +185,15 @@ if sourceObjs:
     schemas = {}
     for objOwner, name, objType in sourceObjs:
         schemas[objOwner] = None
-    describer.schemas = schemas.keys()
+    describer.schemas = list(schemas.keys())
     describer.currentOwner = currentOwner
 
     # acquire the list of dependencies from the database
-    print >> sys.stderr, "Acquiring dependencies..."
+    print("Acquiring dependencies...", file = sys.stderr)
     dependencies = describer.RetrieveDependencies()
 
     # now order them
-    print >> sys.stderr, "Ordering source objects..."
+    print("Ordering source objects...", file = sys.stderr)
     sourceObjs = cx_OracleObject.OrderObjects(sourceObjs, dependencies)
 
 # perform the drops
@@ -202,10 +202,10 @@ for obj in oldObjs:
     if obj not in newObjs:
         objsToDrop[obj] = None
 if objsToDrop:
-    print >> sys.stderr, "Dropping unused objects..."
-    print "-- dropping unused objects"
-    print
-    objs = objsToDrop.keys()
+    print("Dropping unused objects...", file = sys.stderr)
+    print("-- dropping unused objects")
+    print()
+    objs = list(objsToDrop.keys())
     objs.sort()
     for obj in objs:
         objOwner, objName, objType = obj
@@ -215,14 +215,14 @@ if objsToDrop:
                 True)
 
 # output the statements for all of the objects
-print >> sys.stderr, "Generating patch for new and modified objects..."
+print("Generating patch for new and modified objects...", file = sys.stderr)
 for obj in preSourceObjs + sourceObjs + postSourceObjs:
 
     # initialization
     objOwner, objName, objType = obj
     outputType = objType.lower()
     outputName = objName.lower()
-    existed = oldObjs.has_key(obj)
+    existed = obj in oldObjs
 
     # retrieve the statements in the files
     newStatements = Statements(options.toDir, newObjs[obj], objType,
@@ -235,11 +235,11 @@ for obj in preSourceObjs + sourceObjs + postSourceObjs:
     if not existed or objType == "TRIGGER":
       describer.SetOwner(objOwner, objType)
       if existed:
-          print "-- modifying",
+          print("-- modifying", end=' ')
       else:
-          print "-- creating",
-      print outputType, outputName
-      print
+          print("-- creating", end=' ')
+      print(outputType, outputName)
+      print()
       for statement in newStatements:
           if wantGrants or not isinstance(statement, grantStatementClass):
               sys.stdout.write(statement.sql)
@@ -251,8 +251,8 @@ for obj in preSourceObjs + sourceObjs + postSourceObjs:
         # compare main object
         if newStatements[0].sql != oldStatements[0].sql:
           describer.SetOwner(objOwner, objType)
-          print "-- modifying", outputType, outputName
-          print
+          print("-- modifying", outputType, outputName)
+          print()
           if objType not in SOURCE_TYPES:
               OutputDropStatement(oldStatements, objsToDrop, objOwner,
                       objName, objType, False)
@@ -269,7 +269,7 @@ for obj in preSourceObjs + sourceObjs + postSourceObjs:
 
         # determine the privileges to be granted
         grants = []
-        for row, withGrantOption in newGrants.items():
+        for row, withGrantOption in list(newGrants.items()):
             origGrantOption = oldGrants.get(row)
             if withGrantOption != origGrantOption:
                 grants.append((row[0], row[1], withGrantOption))
@@ -279,15 +279,15 @@ for obj in preSourceObjs + sourceObjs + postSourceObjs:
         # output the privilege changes
         if grants or revokes:
             describer.SetOwner(objOwner, objType)
-            print "-- modifying grants for", outputType, outputName
-            print
+            print("-- modifying grants for", outputType, outputName)
+            print()
             revokes.sort()
             for privilege, grantee in revokes:
-                print "revoke", privilege, "on", outputName, "from",
-                print grantee + ";"
+                print("revoke", privilege, "on", outputName, "from", end=' ')
+                print(grantee + ";")
             grants.sort()
             for privilege, grantee, withGrantOption in grants:
-                print "grant", privilege, "on", outputName, "to",
-                print grantee + withGrantOption + ";"
-            print
+                print("grant", privilege, "on", outputName, "to", end=' ')
+                print(grantee + withGrantOption + ";")
+            print()
 

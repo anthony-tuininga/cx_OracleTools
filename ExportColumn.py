@@ -64,6 +64,6 @@ else:
 
 # execute the statement and retrieve the data
 lob, = cursor.executeandfetchone(statement, **options.values)
-file(options.fileName, mode).write(lob.read())
-print >> sys.stderr, "Column successfully exported."
+open(options.fileName, mode).write(lob.read())
+print("Column successfully exported.", file = sys.stderr)
 
