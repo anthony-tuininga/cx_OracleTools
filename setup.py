@@ -8,7 +8,7 @@ import sys
 from distutils.errors import DistutilsSetupError
 
 NAME = "cx_OracleTools"
-VERSION = "8.0"
+VERSION = "9.0"
 
 class build_exe(cx_Freeze.build_exe):
     user_options = cx_Freeze.build_exe.user_options + [
@@ -149,7 +149,6 @@ else:
                          "doc/cx_OracleTools.html" ] ) ]
 
 buildOptions = dict(
-        compressed = True,
         optimize = 2,
         replace_paths = [("*", "")])
 options = dict(build_exe = buildOptions)
