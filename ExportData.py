@@ -50,7 +50,7 @@ if options.maxLongSize:
 if options.fileName == "-":
   outFile = sys.stdout
 else:
-  outFile = file(options.fileName, "wb")
+  outFile = open(options.fileName, "wb")
 
 # retrieve the set of tables that will make up the export
 tables = []
