@@ -43,7 +43,7 @@ if options.binary:
 else:
     mode = "w"
 if options.statementInFile:
-    options.statement = file(options.statement).read().strip()
+    options.statement = open(options.statement).read().strip()
 options.isColumn = " " not in options.statement
 if not options.isColumn:
     statement = options.statement

@@ -69,7 +69,7 @@ cursor = destConnection.cursor()
 sourceSQL = options.source.strip()
 destinationTable = options.destination
 if not sourceSQL.lower().startswith("select ") and os.path.isfile(sourceSQL):
-    sourceSQL = file(sourceSQL).read().strip()
+    sourceSQL = open(sourceSQL).read().strip()
 elif " " not in sourceSQL:
     if destinationTable is None:
         destinationTable = sourceSQL

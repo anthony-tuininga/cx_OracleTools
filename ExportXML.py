@@ -51,7 +51,7 @@ names = [item[0] for item in cursor.description]
 if options.fileName == "-":
     outputFile = sys.stdout
 else:
-    outputFile = file(options.fileName, "w")
+    outputFile = open(options.fileName, "w")
 writer = cx_XML.Writer(outputFile, numSpaces = 4)
 writer.StartTag("ROWSET")
 for row in cursor:

@@ -45,12 +45,12 @@ cursor.arraysize = 50
 if options.fileName is None or options.fileName == "-":
     outFile = sys.stdout
 else:
-    outFile = file(options.fileName, "w")
+    outFile = open(options.fileName, "w")
 
 # determine SQL and execute it
 sql = options.sql
 if options.sqlInFile:
-    sql = file(sql).read()
+    sql = open(sql).read()
 cursor.execute(sql)
 
 # define function to return an evaluated string (to support tabs, newlines)
