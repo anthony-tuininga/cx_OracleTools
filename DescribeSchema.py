@@ -50,7 +50,7 @@ environment = cx_OracleObject.Environment(connection, options)
 if options.fileName is None or options.fileName == "-":
     outFile = sys.stdout
 else:
-    outFile = file(options.fileName, "w")
+    outFile = open(options.fileName, "w")
 describer = cx_OracleObject.Describer(environment, options, outFile)
 
 # describe the schema(s)

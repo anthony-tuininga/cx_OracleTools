@@ -46,9 +46,9 @@ if options.binary:
 else:
     mode = "r"
     bindType = cx_Oracle.LONG_STRING
-data = file(options.fileName, mode).read()
+data = open(options.fileName, mode).read()
 if options.statementInFile:
-    options.statement = file(options.statement).read().strip()
+    options.statement = open(options.statement).read().strip()
 options.isColumn = " " not in options.statement
 if not options.isColumn:
     statement = options.statement

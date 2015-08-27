@@ -109,7 +109,7 @@ class Handler(object):
 if options.fileName == "-":
     inputFile = sys.stdin
 else:
-    inputFile = file(options.fileName, "r")
+    inputFile = open(options.fileName, "r")
 handler = Handler(options)
 handler.Process(inputFile)
 
