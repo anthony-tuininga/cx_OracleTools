@@ -27,13 +27,12 @@ description of each script is provided here.
 This project depends on the following projects if used in source mode. If you
 are using the binary version these dependencies can be safely ignored.
 
-cx_PyGenLib - https://github.com/anthony-tuininga/cx_PyGenLib
-cx_PyOracleLib - https://github.com/anthony-tuininga/cx_PyOracleLib
-cx_Oracle - https://github.com/oracle/python-cx_Oracle
+- cx_PyGenLib - https://github.com/anthony-tuininga/cx_PyGenLib
+- cx_PyOracleLib - https://github.com/anthony-tuininga/cx_PyOracleLib
+- cx_Oracle - https://github.com/oracle/python-cx_Oracle
 
-The binary versions of these tools were built with cx_Freeze.
-
-cx_Freeze - https://github.com/anthony-tuininga/cx_Freeze
+The binary versions of these tools were built with
+[cx_Freeze](https://github.com/anthony-tuininga/cx_Freeze).
 
 This project is released under a free software license. See LICENSE.txt for
 more details.
