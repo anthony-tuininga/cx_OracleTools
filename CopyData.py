@@ -167,7 +167,7 @@ for name in matchingColumns:
     colPos, colType, isLob = sourceColumns[name]
     sourceVar = sourceVars[colPos]
     if options.checkExists or isLob:
-        targetVar = insertCursor.var(colType, sourceVar.maxlength)
+        targetVar = insertCursor.var(colType, sourceVar.bufferSize)
         insertVars.append((sourceVar, targetVar, isLob))
     else:
         targetVar = sourceVar
@@ -190,7 +190,7 @@ if options.checkExists:
     for name in keyColumns:
         colPos, colType, isLob = sourceColumns[name]
         sourceVar = sourceVars[colPos]
-        targetVar = existsCursor.var(colType, sourceVar.maxlength)
+        targetVar = existsCursor.var(colType, sourceVar.bufferSize)
         vars.append(targetVar)
         existsVars.append((sourceVar, targetVar, isLob))
     existsCursor.setinputsizes(*vars)
@@ -221,7 +221,7 @@ if options.checkExists and len(keyColumns) != len(matchingColumns):
     for name in updateColumns:
         colPos, colType, isLob = sourceColumns[name]
         sourceVar = sourceVars[colPos]
-        targetVar = updateCursor.var(colType, sourceVar.maxlength)
+        targetVar = updateCursor.var(colType, sourceVar.bufferSize)
         updateVars.append((sourceVar, targetVar, isLob))
         vars.append(targetVar)
     updateCursor.setinputsizes(*vars)
