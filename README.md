@@ -1,5 +1,5 @@
-cx_OracleTools
---------------
+# cx_OracleTools
+
 This project contains a number of Python scripts that handle Oracle databases.
 Each of these scripts is self documented by the --help or -h option.
 Additional documentation will be forthcoming at a later date. A brief
@@ -27,13 +27,13 @@ RecompileSource - recompile all invalid objects in the database
 This project depends on the following projects if used in source mode. If you
 are using the binary version these dependencies can be safely ignored.
 
-cx_PyGenLib - http://cx-pygenlib.sourceforge.net
-cx_PyOracleLib - http://cx-pyoraclelib.sourceforge.net
-cx_Oracle - http://cx-oracle.sourceforge.net
+cx_PyGenLib - https://github.com/anthony-tuininga/cx_PyGenLib
+cx_PyOracleLib - https://github.com/anthony-tuininga/cx_PyOracleLib
+cx_Oracle - https://github.com/oracle/python-cx_Oracle
 
 The binary versions of these tools were built with cx_Freeze.
 
-cx_Freeze - http://cx-freeze.sourceforge.net
+cx_Freeze - https://github.com/anthony-tuininga/cx_Freeze
 
 This project is released under a free software license. See LICENSE.txt for
 more details.
